@@ -6,7 +6,6 @@
 #include <WiFiClient.h>
 #include <WebServer.h>
 #include <ESPmDNS.h>
-#include <HTTPUpdateServer.h>
 #include "AnchorController.h"
 #include "AnchorAPI.h"
 #include "wifi.h"
@@ -15,7 +14,6 @@ const char* ssid = STASSID;
 const char* password = STAPSK;
 
 WebServer httpServer(80);
-HTTPUpdateServer httpUpdater;
 AnchorController controller;
 AnchorAPI api(controller);
 
@@ -42,7 +40,6 @@ void setup(void) {
 
   api.setup(httpServer);
 
-  httpUpdater.setup(&httpServer);
   httpServer.begin();
 
   Serial.printf("setup() complete");

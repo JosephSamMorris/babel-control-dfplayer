@@ -1,7 +1,9 @@
 #pragma once
 
-#include "AnchorController.h"
+#include <HTTPUpdateServer.h>
 #include <WebServer.h>
+
+#include "AnchorController.h"
 
 class AnchorAPI {
 public:
@@ -10,5 +12,6 @@ public:
   String getHostname();
 
 private:
-  AnchorController controller;
+  AnchorController &controller;
+  HTTPUpdateServer httpUpdater;
 };
