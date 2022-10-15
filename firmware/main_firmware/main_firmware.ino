@@ -11,7 +11,6 @@
 #include "AnchorAPI.h"
 #include "wifi.h"
 
-const char* host = "anchor";
 const char* ssid = STASSID;
 const char* password = STAPSK;
 
@@ -21,7 +20,7 @@ AnchorController controller;
 AnchorAPI api(controller);
 
 void handleRoot() {
-  httpServer.send(200, "text/plain", "hello from esp32");
+  httpServer.send(200, "text/plain", "hello");
 }
 
 void setup(void) {
@@ -31,6 +30,7 @@ void setup(void) {
   Serial.println("Booting Sketch...");
 
   WiFi.mode(WIFI_AP_STA);
+  WiFi.setHostname(api.getHostname().c_str());
   WiFi.begin(ssid, password);
 
   while (WiFi.waitForConnectResult() != WL_CONNECTED) {

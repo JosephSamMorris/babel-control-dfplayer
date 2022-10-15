@@ -2,5 +2,5 @@
 
 class AnchorController {
 public:
-    static float getInternalTemperatureCelsius();
+  static float getInternalTemperatureCelsius();
 };
