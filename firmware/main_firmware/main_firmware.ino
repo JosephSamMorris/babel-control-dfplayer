@@ -5,11 +5,12 @@
 #include <WiFi.h>
 #include <WiFiClient.h>
 #include <WebServer.h>
-#include <ESPmDNS.h>
 #include "AnchorController.h"
 #include "AnchorAPI.h"
+#include "AnchorReceiver.h"
 #include "wifi.h"
 
+const unsigned int UDP_PORT = 4210;
 const float ANIMATION_BRIGHTNESS = 0.2;
 
 const char* ssid = STASSID;
@@ -18,6 +19,7 @@ const char* password = STAPSK;
 WebServer httpServer(80);
 AnchorController controller;
 AnchorAPI api(controller);
+AnchorReceiver receiver(controller, UDP_PORT);
 
 void handleRoot() {
   httpServer.send(200, "text/plain", "hello");
@@ -67,8 +69,12 @@ void setup(void) {
   Serial.println();
   Serial.println("Booting Sketch...");
 
+  delay(1000);
+
+  Serial.println("Setting up Anchor controller...");
   controller.setup();
 
+  Serial.println("Setting up WiFi...");
   WiFi.mode(WIFI_AP_STA);
   WiFi.setHostname(api.getHostname().c_str());
   WiFi.begin(ssid, password);
@@ -89,6 +95,7 @@ void setup(void) {
     delay(10);
     Serial.print(".");
   } while (connectStatus != WL_CONNECTED);
+  Serial.println();
 
   animateConnectionSucceeded();
 
@@ -97,11 +104,13 @@ void setup(void) {
   api.setup(httpServer);
 
   httpServer.begin();
+  receiver.begin();
 
   Serial.printf("setup() complete");
 }
 
 void loop(void) {
   controller.update();
+  receiver.update();
   httpServer.handleClient();
 }
