@@ -24,7 +24,7 @@ void AudioController::setup() {
   const int loopCycles = 84;
   const int dt = (rtc_fast_freq_hz / samplingRate) - loopCycles;
   if (dt < 0) {
-    Serial.println("Sampling rate too high"); 
+    Serial.println("Sampling rate too high");
   }
 
 const ulp_insn_t mono[] = {

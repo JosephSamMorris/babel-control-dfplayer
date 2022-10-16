@@ -3,11 +3,12 @@
 #include "LedController.h"
 #include "AudioController.h"
 
+const float INITIAL_BRIGHTNESS_LIMIT = 0.25;
 const float CLOSE_ENOUGH = 0.01;
 
 class AnchorController {
 public:
-  AnchorController() : lightLimit(0), lightLimitConfirm(0) {}
+  AnchorController() : lightLimit(INITIAL_BRIGHTNESS_LIMIT), lightLimitConfirm(INITIAL_BRIGHTNESS_LIMIT) {}
   void setup();
   void update();
 
