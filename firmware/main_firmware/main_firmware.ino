@@ -27,6 +27,8 @@ void setup(void) {
   Serial.println();
   Serial.println("Booting Sketch...");
 
+  controller.setup();
+
   WiFi.mode(WIFI_AP_STA);
   WiFi.setHostname(api.getHostname().c_str());
   WiFi.begin(ssid, password);

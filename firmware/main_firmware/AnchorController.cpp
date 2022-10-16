@@ -13,6 +13,10 @@ uint8_t temprature_sens_read();
 
 uint8_t temprature_sens_read();
 
+void AnchorController::setup() {
+  ledController.setup();
+}
+
 float AnchorController::getInternalTemperatureCelsius() {
   // Internal temperature sensor has a large random offset between chips
   // so it's only really useful for tracking deltas
@@ -44,5 +48,16 @@ float AnchorController::getLightLimit() {
     return 0;
   } else {
     return lightLimit;
+  }
+}
+
+void AnchorController::setBrightness(unsigned int ledIndex, float brightness) {
+  float adjustedBrightness = getLightLimit() * brightness;
+  ledController.setBrightness(ledIndex, adjustedBrightness);
+}
+
+void AnchorController::setBrightnessAll(float brightness) {
+  for (int i = 0; i < 4; i++) {
+    setBrightness(i, brightness);
   }
 }
