@@ -1,9 +1,4 @@
-#include "Arduino.h"
 #include "AnchorReceiver.h"
-
-const int MAX_UNIT_COUNT = 180;
-const int CMD_DATA_SIZE = 8;
-const int PACKET_SIZE = MAX_UNIT_COUNT * CMD_DATA_SIZE;
 
 void AnchorReceiver::handleCommand(struct DirectCmdPacket &cmd) {
   controller.setBrightnessAll(cmd.brightness);
@@ -30,6 +25,7 @@ void AnchorReceiver::update() {
     return;
   }
 
+  unsigned int packetOffset = controller.getPacketOffset();
   uint8_t *cmdData = &packet[packetOffset * CMD_DATA_SIZE];
 
   uint8_t mode = cmdData[0];
@@ -45,13 +41,4 @@ void AnchorReceiver::update() {
   } else if (mode == 1) {
     // TODO: implement behavior commands
   }
-}
-
-void AnchorReceiver::setPacketOffset(unsigned int offset) {
-  if (offset >= MAX_UNIT_COUNT) {
-    // Invalid!
-    return;
-  }
-
-  packetOffset = offset;
 }

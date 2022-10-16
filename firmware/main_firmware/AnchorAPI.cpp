@@ -1,4 +1,5 @@
 #include "AnchorAPI.h"
+#include "AnchorReceiver.h"
 
 void AnchorAPI::setup(WebServer &server) {
   httpUpdater.setup(&server); // /update
@@ -105,6 +106,27 @@ void AnchorAPI::setup(WebServer &server) {
       }
 
       controller.setVolume(maybeValue / 100.0f);
+
+      server.send(200, "text/plain", "ok\n");
+    }
+  );
+
+  // API - /control/offset - get or set offset in UDP broadcasts.
+
+  server.on(
+    "/control/offset",
+    HTTP_POST,
+    [&]() {
+      String postBody = server.arg("plain");
+
+      int maybeValue = postBody.toInt();
+
+      if (maybeValue < 0 || maybeValue >= MAX_UNIT_COUNT) {
+        server.send(400, "text/plain", "Offset must be between 0 and 179\n");
+        return;
+      }
+
+      controller.setPacketOffset(maybeValue);
 
       server.send(200, "text/plain", "ok\n");
     }

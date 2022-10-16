@@ -4,6 +4,10 @@
 
 #include "AnchorController.h"
 
+const int MAX_UNIT_COUNT = 180;
+const int CMD_DATA_SIZE = 8;
+const int PACKET_SIZE = MAX_UNIT_COUNT * CMD_DATA_SIZE;
+
 struct DirectCmdPacket {
   float brightness;
   float offsetMillis;
@@ -18,15 +22,11 @@ public:
   AnchorReceiver(AnchorController &_controller, unsigned int port) : controller(_controller), udpPort(port) {}
   void begin();
   void update();
-  void setPacketOffset(unsigned int offset);
 
 private:
   AnchorController &controller;
   WiFiUDP udp;
   unsigned int udpPort;
-
-  // Offset in the packet for our command
-  unsigned int packetOffset;
 
   void handleCommand(struct DirectCmdPacket &cmd);
 };

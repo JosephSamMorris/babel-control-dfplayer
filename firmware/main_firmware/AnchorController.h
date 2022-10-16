@@ -23,10 +23,14 @@ public:
   void setVolume(float volume);
 
   // Misc
+  void setPacketOffset(unsigned int newPacketOffset);
+  unsigned int getPacketOffset();
   static float getInternalTemperatureCelsius();
 private:
   LedController ledController;
   AudioController audioController;
+
+  unsigned int packetOffset;
 
   float lightLimit;
   float lightLimitConfirm;

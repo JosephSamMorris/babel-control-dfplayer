@@ -1,5 +1,7 @@
 #include <math.h>
 #include <stdint.h>
+#include <EEPROM.h>
+#include "AnchorReceiver.h"
 
 #include "AnchorController.h"
 
@@ -14,6 +16,9 @@ uint8_t temprature_sens_read();
 uint8_t temprature_sens_read();
 
 void AnchorController::setup() {
+  // Read the saved packet offset from EEPROM
+  packetOffset = (EEPROM.read(0) << 8) | EEPROM.read(1);
+
   ledController.setup();
   audioController.setup();
 }
@@ -69,6 +74,23 @@ void AnchorController::setVolume(float volume) {
 }
 
 // MISC API
+
+void AnchorController::setPacketOffset(unsigned int newPacketOffset) {
+  if (newPacketOffset >= MAX_UNIT_COUNT) {
+    return;
+  }
+
+  packetOffset = newPacketOffset;
+
+  // Save the new packet offset to EEPROM
+  EEPROM.write(0, packetOffset >> 8);
+  EEPROM.write(1, packetOffset & 0xff);
+  EEPROM.commit();
+}
+
+unsigned int AnchorController::getPacketOffset() {
+  return packetOffset;
+}
 
 float AnchorController::getInternalTemperatureCelsius() {
   // Internal temperature sensor has a large random offset between chips
