@@ -15,14 +15,14 @@ uint8_t temprature_sens_read();
 
 void AnchorController::setup() {
   ledController.setup();
+  audioController.setup();
 }
 
-float AnchorController::getInternalTemperatureCelsius() {
-  // Internal temperature sensor has a large random offset between chips
-  // so it's only really useful for tracking deltas
-  // https://www.esp32.com/viewtopic.php?p=20145&sid=01781d380a7a77ef03b8300fcae1bbc0#p20145
-  return (temprature_sens_read() - 32) / 1.8;
+void AnchorController::update() {
+  audioController.update();
 }
+
+// LED API
 
 void AnchorController::setLightLimit(float newLimit) {
   if (newLimit < 0 || newLimit > 1) {
@@ -60,4 +60,19 @@ void AnchorController::setBrightnessAll(float brightness) {
   for (int i = 0; i < 4; i++) {
     setBrightness(i, brightness);
   }
+}
+
+// SOUND API
+
+void AnchorController::setVolume(float volume) {
+  audioController.setVolume(volume);
+}
+
+// MISC API
+
+float AnchorController::getInternalTemperatureCelsius() {
+  // Internal temperature sensor has a large random offset between chips
+  // so it's only really useful for tracking deltas
+  // https://www.esp32.com/viewtopic.php?p=20145&sid=01781d380a7a77ef03b8300fcae1bbc0#p20145
+  return (temprature_sens_read() - 32) / 1.8;
 }

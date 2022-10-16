@@ -89,6 +89,27 @@ void AnchorAPI::setup(WebServer &server) {
     }
   );
 
+  // API /sound/volume - set the current volume (0.0-100.0%)
+
+  server.on(
+    "/sound/volume",
+    HTTP_POST,
+    [&]() {
+      String postBody = server.arg("plain");
+
+      float maybeValue = postBody.toFloat();
+
+      if (maybeValue < 0 || maybeValue > 100) {
+        server.send(400, "text/plain", "Volume must be between 0.0 and 100.0\n");
+        return;
+      }
+
+      controller.setVolume(maybeValue / 100.0f);
+
+      server.send(200, "text/plain", "ok\n");
+    }
+  );
+
   server.on("/temperature", HTTP_GET, [&]() {
     float tempCelsius = controller.getInternalTemperatureCelsius();
     String msg = String(tempCelsius) + " C\n";

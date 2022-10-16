@@ -48,5 +48,6 @@ void setup(void) {
 }
 
 void loop(void) {
+  controller.update();
   httpServer.handleClient();
 }
