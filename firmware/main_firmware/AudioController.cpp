@@ -109,8 +109,16 @@ void AudioController::update() {
   }
 }
 
+void AudioController::setOffsetMillis(unsigned int newOffsetMillis) {
+  int offsetInSamples = newOffsetMillis * samplingRate / 1000;
+
+  // Wrap if beyond the end of the audio
+  lastFilledWord = offsetInSamples;
+  lastFilledWord %= totalSampleWords;
+}
+
 void AudioController::setVolume(float newVolume) {
-  currentVolume = constrain(newVolume, 0, 1);
+  currentVolume = constrain(newVolume, 0, 4);
 }
 
 unsigned char AudioController::nextSample() {

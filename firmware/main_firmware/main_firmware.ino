@@ -106,7 +106,11 @@ void setup(void) {
   httpServer.begin();
   receiver.begin();
 
-  Serial.printf("setup() complete");
+  Serial.println("setup() complete");
+  Serial.print("Hostname is ");
+  Serial.println(api.getHostname());
+  Serial.print("IP address is ");
+  Serial.println(WiFi.localIP());
 }
 
 void loop(void) {

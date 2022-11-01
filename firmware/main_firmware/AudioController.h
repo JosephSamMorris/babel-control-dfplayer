@@ -8,6 +8,7 @@ public:
   void setup();
   void update();
 
+  void setOffsetMillis(unsigned int offsetMillis);
   void setVolume(float newVolume);
 private:
   const int opcodeCount = 17;

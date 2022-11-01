@@ -69,6 +69,10 @@ void AnchorController::setBrightnessAll(float brightness) {
 
 // SOUND API
 
+void AnchorController::setAudioOffset(unsigned int offsetMillis) {
+  audioController.setOffsetMillis(offsetMillis);
+}
+
 void AnchorController::setVolume(float volume) {
   audioController.setVolume(volume);
 }

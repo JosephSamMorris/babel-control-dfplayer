@@ -20,6 +20,7 @@ public:
   void setBrightnessAll(float brightness);
 
   // Sound control
+  void setAudioOffset(unsigned int offsetMillis);
   void setVolume(float volume);
 
   // Misc

@@ -90,6 +90,27 @@ void AnchorAPI::setup(WebServer &server) {
     }
   );
 
+  // API /sound/offset - set the current time offset in milliseconds.
+
+  server.on(
+    "/sound/offset",
+    HTTP_POST,
+    [&]() {
+      String postBody = server.arg("plain");
+
+      int maybeValue = postBody.toInt();
+
+      if (maybeValue < 0) {
+        server.send(400, "text/plain", "Sound offset must be greater than zero\n");
+        return;
+      }
+
+      controller.setAudioOffset(maybeValue);
+
+      server.send(200, "text/plain", "ok\n");
+    }
+  );
+
   // API /sound/volume - set the current volume (0.0-100.0%)
 
   server.on(
@@ -100,8 +121,8 @@ void AnchorAPI::setup(WebServer &server) {
 
       float maybeValue = postBody.toFloat();
 
-      if (maybeValue < 0 || maybeValue > 100) {
-        server.send(400, "text/plain", "Volume must be between 0.0 and 100.0\n");
+      if (maybeValue < 0 || maybeValue > 400) {
+        server.send(400, "text/plain", "Volume must be between 0.0 and 400.0\n");
         return;
       }
 
