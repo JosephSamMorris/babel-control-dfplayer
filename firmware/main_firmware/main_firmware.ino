@@ -75,7 +75,7 @@ void setup(void) {
   controller.setup();
 
   Serial.println("Setting up WiFi...");
-  WiFi.mode(WIFI_AP_STA);
+  WiFi.mode(WIFI_STA);
   WiFi.setHostname(api.getHostname().c_str());
   WiFi.begin(ssid, password);
 
