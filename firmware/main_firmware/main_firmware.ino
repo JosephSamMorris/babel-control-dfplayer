@@ -71,6 +71,19 @@ void resetAfterDelay() {
   ESP.restart();
 }
 
+void connectionWatchDog() {
+  static unsigned long timeLastConnectedMillis = millis();
+  unsigned long currentMillis = millis();
+
+  if (WiFi.status() == WL_CONNECTED) {
+    timeLastConnectedMillis = currentMillis;
+  }
+
+  if ((WiFi.status() != WL_CONNECTED) && (currentMillis - timeLastConnectedMillis) > TIMEOUT_WIFI) {
+    resetAfterDelay();
+  }
+}
+
 void setup(void) {
   api.setController(&controller);
   receiver.setController(&controller);
@@ -125,16 +138,7 @@ void setup(void) {
 }
 
 void loop(void) {
-  static unsigned long timeLastConnectedMillis = millis();
-  unsigned long currentMillis = millis();
-
-  if (WiFi.status() == WL_CONNECTED) {
-    timeLastConnectedMillis = currentMillis;
-  }
-
-  if ((WiFi.status() != WL_CONNECTED) && (currentMillis - timeLastConnectedMillis) > TIMEOUT_WIFI) {
-    resetAfterDelay();
-  }
+  connectionWatchDog();
 
   controller.update();
   receiver.update();
