@@ -11,6 +11,17 @@ void AudioController::setup() {
 
   // Calculate the actual ULP clock
   unsigned long rtc_8md256_period = rtc_clk_cal(RTC_CAL_8MD256, 1000);
+
+  Serial.print("rtc_clk_cal ");
+  Serial.println(rtc_8md256_period);
+
+  // HACK: we only have to do this because rtc_clk_cal returns zero after a
+  // software reset. We should figure out why that happens and fix the root.
+  if (rtc_8md256_period == 0) {
+    rtc_8md256_period = 15744985;
+    Serial.println("Falling back to hardcoded rtc_8md256_period");
+  }
+
   unsigned long rtc_fast_freq_hz =
       1000000ULL * (1 << RTC_CLK_CAL_FRACT) * 256 / rtc_8md256_period;
 
