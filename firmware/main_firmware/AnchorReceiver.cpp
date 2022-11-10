@@ -1,8 +1,8 @@
 #include "AnchorReceiver.h"
 
 void AnchorReceiver::handleCommand(struct DirectCmdPacket &cmd) {
-  controller.setBrightnessAll(cmd.brightness);
-  controller.setVolume(cmd.volume);
+  controller->setBrightnessAll(cmd.brightness);
+  controller->setVolume(cmd.volume);
 }
 
 void AnchorReceiver::begin() {
@@ -25,7 +25,7 @@ void AnchorReceiver::update() {
     return;
   }
 
-  unsigned int packetOffset = controller.getPacketOffset();
+  unsigned int packetOffset = controller->getPacketOffset();
   uint8_t *cmdData = &packet[packetOffset * CMD_DATA_SIZE];
 
   uint8_t mode = cmdData[0];

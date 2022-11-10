@@ -18,7 +18,7 @@ void AnchorAPI::setup(WebServer &server) {
     "/light/limit",
     HTTP_GET,
     [&]() {
-      float lightLimit = controller.getLightLimit() * 100.0f;
+      float lightLimit = controller->getLightLimit() * 100.0f;
 
       char lightLimitStr[8] = {0};
       snprintf(lightLimitStr, sizeof(lightLimitStr), "%.2f", lightLimit);
@@ -40,7 +40,7 @@ void AnchorAPI::setup(WebServer &server) {
         return;
       }
 
-      controller.setLightLimit(maybeValue / 100.0f);
+      controller->setLightLimit(maybeValue / 100.0f);
 
       server.send(200, "text/plain", "ok\n");
     }
@@ -61,7 +61,7 @@ void AnchorAPI::setup(WebServer &server) {
         return;
       }
 
-      controller.confirmLightLimit(maybeValue / 100.0f);
+      controller->confirmLightLimit(maybeValue / 100.0f);
 
       server.send(200, "text/plain", "ok\n");
     }
@@ -84,7 +84,7 @@ void AnchorAPI::setup(WebServer &server) {
         return;
       }
 
-      controller.setBrightnessAll(maybeValue / 100.0f);
+      controller->setBrightnessAll(maybeValue / 100.0f);
 
       server.send(200, "text/plain", "ok\n");
     }
@@ -105,7 +105,7 @@ void AnchorAPI::setup(WebServer &server) {
         return;
       }
 
-      controller.setAudioOffset(maybeValue);
+      controller->setAudioOffset(maybeValue);
 
       server.send(200, "text/plain", "ok\n");
     }
@@ -126,7 +126,7 @@ void AnchorAPI::setup(WebServer &server) {
         return;
       }
 
-      controller.setVolume(maybeValue / 100.0f);
+      controller->setVolume(maybeValue / 100.0f);
 
       server.send(200, "text/plain", "ok\n");
     }
@@ -147,14 +147,14 @@ void AnchorAPI::setup(WebServer &server) {
         return;
       }
 
-      controller.setPacketOffset(maybeValue);
+      controller->setPacketOffset(maybeValue);
 
       server.send(200, "text/plain", "ok\n");
     }
   );
 
   server.on("/temperature", HTTP_GET, [&]() {
-    float tempCelsius = controller.getInternalTemperatureCelsius();
+    float tempCelsius = controller->getInternalTemperatureCelsius();
     String msg = String(tempCelsius) + " C\n";
     server.send(200, "text/plain", msg);
   });

@@ -8,7 +8,7 @@ const float CLOSE_ENOUGH = 0.01;
 
 class AnchorController {
 public:
-  AnchorController() : lightLimit(INITIAL_BRIGHTNESS_LIMIT), lightLimitConfirm(INITIAL_BRIGHTNESS_LIMIT) {}
+  AnchorController() : audioInitialized(false), lightLimit(INITIAL_BRIGHTNESS_LIMIT), lightLimitConfirm(INITIAL_BRIGHTNESS_LIMIT) {}
   void setup();
   void update();
 
@@ -30,6 +30,8 @@ public:
 private:
   LedController ledController;
   AudioController audioController;
+
+  bool audioInitialized;
 
   unsigned int packetOffset;
 

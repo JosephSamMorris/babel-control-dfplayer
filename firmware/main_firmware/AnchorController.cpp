@@ -20,10 +20,15 @@ void AnchorController::setup() {
   packetOffset = (EEPROM.read(0) << 8) | EEPROM.read(1);
 
   ledController.setup();
-  audioController.setup();
+  // audioController.setup();
 }
 
 void AnchorController::update() {
+  if (!audioInitialized) {
+    audioController.setup();
+    audioInitialized = true;
+  }
+
   audioController.update();
 }
 

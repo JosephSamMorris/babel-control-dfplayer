@@ -19,12 +19,17 @@ struct BehaviorCmdPacket {
 
 class AnchorReceiver {
 public:
-  AnchorReceiver(AnchorController &_controller, unsigned int port) : controller(_controller), udpPort(port) {}
+  AnchorReceiver(unsigned int port) : udpPort(port) {}
   void begin();
   void update();
 
+public:
+  void setController(AnchorController *controller) {
+    this->controller = controller;
+  }
+
 private:
-  AnchorController &controller;
+  AnchorController *controller = nullptr;
   WiFiUDP udp;
   unsigned int udpPort;
 

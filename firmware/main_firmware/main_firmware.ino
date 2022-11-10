@@ -10,6 +10,7 @@
 #include "AnchorReceiver.h"
 #include "wifi.h"
 
+const unsigned int TIMEOUT_WIFI = 60 * 1000;
 const unsigned int UDP_PORT = 4210;
 const float ANIMATION_BRIGHTNESS = 0.2;
 
@@ -18,12 +19,8 @@ const char* password = STAPSK;
 
 WebServer httpServer(80);
 AnchorController controller;
-AnchorAPI api(controller);
-AnchorReceiver receiver(controller, UDP_PORT);
-
-void handleRoot() {
-  httpServer.send(200, "text/plain", "hello");
-}
+AnchorAPI api;
+AnchorReceiver receiver(UDP_PORT);
 
 void animateConnecting() {
   const float spread = PI / 2;
@@ -63,7 +60,21 @@ void animateConnectionFailed() {
   }
 }
 
+void resetAfterDelay() {
+  Serial.println("WiFi connection timeout. Going to reset after a delay");
+
+  // Delay a random amount before resetting to help alleviate stampeding
+  delay(random(30 * 1000));
+
+  Serial.println("Resetting!");
+  delay(500);
+  ESP.restart();
+}
+
 void setup(void) {
+  api.setController(&controller);
+  receiver.setController(&controller);
+
   Serial.begin(115200);
 
   Serial.println();
@@ -75,6 +86,7 @@ void setup(void) {
   controller.setup();
 
   Serial.println("Setting up WiFi...");
+  WiFi.setAutoReconnect(true);
   WiFi.mode(WIFI_STA);
   WiFi.setHostname(api.getHostname().c_str());
   WiFi.begin(ssid, password);
@@ -85,10 +97,7 @@ void setup(void) {
 
     if (connectStatus == WL_CONNECT_FAILED) {
       animateConnectionFailed();
-
-      // Retry after a random delay to alleviate stampeding
-      delay(random(3000, 6000));
-      WiFi.begin(ssid, password);
+      resetAfterDelay();
     }
 
     animateConnecting();
@@ -99,7 +108,9 @@ void setup(void) {
 
   animateConnectionSucceeded();
 
-  httpServer.on("/", handleRoot);
+  httpServer.on("/", [&]() {
+    httpServer.send(200, "text/plain", "hello");
+  });
 
   api.setup(httpServer);
 
@@ -114,6 +125,17 @@ void setup(void) {
 }
 
 void loop(void) {
+  static unsigned long timeLastConnectedMillis = millis();
+  unsigned long currentMillis = millis();
+
+  if (WiFi.status() == WL_CONNECTED) {
+    timeLastConnectedMillis = currentMillis;
+  }
+
+  if ((WiFi.status() != WL_CONNECTED) && (currentMillis - timeLastConnectedMillis) > TIMEOUT_WIFI) {
+    resetAfterDelay();
+  }
+
   controller.update();
   receiver.update();
   httpServer.handleClient();

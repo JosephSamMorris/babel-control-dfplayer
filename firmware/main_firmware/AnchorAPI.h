@@ -7,11 +7,15 @@
 
 class AnchorAPI {
 public:
-  AnchorAPI(AnchorController &_controller) : controller(_controller) {}
   void setup(WebServer &server);
   String getHostname();
 
+public:
+  void setController(AnchorController *controller) {
+    this->controller = controller;
+  };
+
 private:
-  AnchorController &controller;
+  AnchorController *controller = nullptr;
   HTTPUpdateServer httpUpdater;
 };
