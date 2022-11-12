@@ -166,7 +166,7 @@ void AnchorAPI::setup(WebServer &server) {
     }
   );
 
-  // API - /control/framerate - get or set the target control rate,
+  // API - /control/rate - get or set the target control rate,
   // which is used for interpolating animations
 
   server.on(
@@ -196,6 +196,38 @@ void AnchorAPI::setup(WebServer &server) {
       }
 
       controller->setRate(maybeValue);
+
+      server.send(200, "text/plain", "ok\n");
+    }
+  );
+
+  server.on(
+    "/control/rate/fixed",
+    HTTP_GET,
+    [&]() {
+      bool usingFixed = controller->usingFixedControlRate();
+
+      if (usingFixed) {
+        server.send(200, "text/plain", "true");
+      } else {
+        server.send(200, "text/plain", "false");
+      }
+    }
+  );
+  server.on(
+    "/control/rate/fixed",
+    HTTP_POST,
+    [&]() {
+      String postBody = server.arg("plain");
+
+      int maybeValue = postBody.toInt();
+
+      if (maybeValue != 0 && maybeValue != 1) {
+        server.send(400, "text/plain", "Must be 0 (false) or 1 (true)\n");
+        return;
+      }
+
+      controller->setUseFixedControlRate(maybeValue);
 
       server.send(200, "text/plain", "ok\n");
     }

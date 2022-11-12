@@ -38,8 +38,14 @@ void AnchorController::setup() {
     controlRate = (float)maybeFixedControlRate / 1000;
   }
 
-  Serial.print("Control rate is ");
-  Serial.println(controlRate);
+  useFixedControlRate = EEPROM.read(6);
+
+  if (useFixedControlRate) {
+    Serial.print("Control rate is fixed at ");
+    Serial.println(controlRate);
+  } else {
+    Serial.println("Control rate is adaptive");
+  }
 
   ledController.setup();
   audioController.setup();
@@ -57,9 +63,17 @@ float min(float a, float b) {
   return b;
 }
 
+float max(float a, float b) {
+  if (a > b) {
+    return a;
+  }
+
+  return b;
+}
+
 void AnchorController::update() {
   // Interpolate LEDs
-  unsigned int lerpPeriod = 1000 / controlRate;
+  unsigned int lerpPeriod = 1000 / getRate();
   unsigned int timeSinceTargetSet = millis() - lightTargetSetTime;
   float periodPortion = min((float)timeSinceTargetSet / lerpPeriod, 1);
 
@@ -109,11 +123,35 @@ void AnchorController::setBrightnessAll(float brightness) {
 }
 
 void AnchorController::setBrightnessTarget(float target) {
-  if (target >= 0 && target < 1.0) {
-    lightTargetPrev = lightTarget;
-    lightTarget = target;
-    lightTargetSetTime = millis();
+  if (target < 0 || target > 1.0) {
+    return;
   }
+
+  unsigned long now = millis();
+
+  // Measure actual rate
+  float timeSinceLast = now - lightTargetSetTime;
+  lightTargetSetTime = now;
+  float rateNow = 1000.0f / timeSinceLast;
+  
+  if (rateNow > MIN_CONTROL_RATE && rateNow < MAX_CONTROL_RATE) {
+    // Update average
+    float avg = measuredControlRate;
+    avg -= avg / CONTROL_RATE_AVERAGE_WINDOW;
+    avg += rateNow / CONTROL_RATE_AVERAGE_WINDOW;
+
+    measuredControlRate = avg;
+
+    // Serial.print(timeSinceLast);
+    // Serial.print("\t");
+    // Serial.print(rateNow);
+    // Serial.print("\t");
+    // Serial.println(measuredControlRate);
+  }
+
+  // Update target
+  lightTargetPrev = lightTarget;
+  lightTarget = target;
 }
 
 // SOUND API
@@ -145,6 +183,17 @@ unsigned int AnchorController::getPacketOffset() {
   return packetOffset;
 }
 
+void AnchorController::setUseFixedControlRate(bool useFixed) {
+  useFixedControlRate = useFixed;
+
+  EEPROM.write(6, useFixed);
+  EEPROM.commit();
+}
+
+bool AnchorController::usingFixedControlRate() {
+  return useFixedControlRate;
+}
+
 void AnchorController::setRate(float newRate) {
   if (newRate > MAX_CONTROL_RATE) {
     return;
@@ -162,7 +211,8 @@ void AnchorController::setRate(float newRate) {
 }
 
 float AnchorController::getRate() {
-  return controlRate;
+  float rawRate = useFixedControlRate ? controlRate : measuredControlRate;
+  return min(max(rawRate, MIN_CONTROL_RATE), MAX_CONTROL_RATE);
 }
 
 float AnchorController::getInternalTemperatureCelsius() {
