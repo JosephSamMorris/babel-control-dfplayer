@@ -84,7 +84,7 @@ void AnchorAPI::setup(WebServer &server) {
         return;
       }
 
-      controller->setBrightnessAll(maybeValue / 100.0f);
+      controller->setBrightnessTarget(maybeValue / 100.0f);
 
       server.send(200, "text/plain", "ok\n");
     }
@@ -136,6 +136,19 @@ void AnchorAPI::setup(WebServer &server) {
 
   server.on(
     "/control/offset",
+    HTTP_GET,
+    [&]() {
+      unsigned int offset = controller->getPacketOffset();
+
+      char offsetStr[8] = {0};
+      snprintf(offsetStr, sizeof(offsetStr), "%d", offset);
+
+      String msg = String(offsetStr) + "\n";
+      server.send(200, "text/plain", msg);
+    }
+  );
+  server.on(
+    "/control/offset",
     HTTP_POST,
     [&]() {
       String postBody = server.arg("plain");
@@ -148,6 +161,41 @@ void AnchorAPI::setup(WebServer &server) {
       }
 
       controller->setPacketOffset(maybeValue);
+
+      server.send(200, "text/plain", "ok\n");
+    }
+  );
+
+  // API - /control/framerate - get or set the target control rate,
+  // which is used for interpolating animations
+
+  server.on(
+    "/control/rate",
+    HTTP_GET,
+    [&]() {
+      float rate = controller->getRate();
+
+      char rateStr[8] = {0};
+      snprintf(rateStr, sizeof(rateStr), "%.2f", rate);
+
+      String msg = String(rateStr) + "\n";
+      server.send(200, "text/plain", msg);
+    }
+  );
+  server.on(
+    "/control/rate",
+    HTTP_POST,
+    [&]() {
+      String postBody = server.arg("plain");
+
+      int maybeValue = postBody.toFloat();
+
+      if (maybeValue <= 0 || maybeValue >= MAX_CONTROL_RATE) {
+        server.send(400, "text/plain", "Control rate must be between 0 and 1000\n");
+        return;
+      }
+
+      controller->setRate(maybeValue);
 
       server.send(200, "text/plain", "ok\n");
     }

@@ -1,7 +1,7 @@
 #include "AnchorReceiver.h"
 
 void AnchorReceiver::handleCommand(struct DirectCmdPacket &cmd) {
-  controller->setBrightnessAll(cmd.brightness);
+  controller->setBrightnessTarget(cmd.brightness);
   controller->setVolume(cmd.volume);
 }
 
