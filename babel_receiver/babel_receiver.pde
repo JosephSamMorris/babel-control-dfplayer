@@ -102,11 +102,11 @@ void renderPacket(byte[] buffer) {
     
     // Fill the volume circle
     float speakerSize = unitDrawSize / 2;
-    stroke(255, 0, 0);
-    fill(255);
+    noStroke();
+    fill(255, 0, 0);
     ellipse(0, 0, speakerSize, speakerSize);
     noStroke();
-    fill(0);
+    fill(0, 0, 255);
     float volSize = map(volume, 0, 1, 0, speakerSize);
     ellipse(0, 0, volSize, volSize);
     
