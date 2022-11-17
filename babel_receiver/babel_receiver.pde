@@ -16,12 +16,15 @@ final int ARRAY_ROWS = 14;
 
 byte[] rxBuffer = new byte[UNIT_COUNT_IN_PACKET * DATA_SIZE];
 
+boolean timedOut = false;
+
 void setup() {
   size(400, 600);
   smooth();
   
   try {
     socket = new DatagramSocket(4210);
+    socket.setSoTimeout(1000);
   } catch (Exception e) {
     e.printStackTrace(); 
     println(e.getMessage());
@@ -103,7 +106,7 @@ void renderPacket(byte[] buffer) {
     // Fill the volume circle
     float speakerSize = unitDrawSize / 2;
     noStroke();
-    fill(255, 0, 0);
+    fill(255, 100, 100);
     ellipse(0, 0, speakerSize, speakerSize);
     noStroke();
     fill(0, 0, 255);
@@ -126,9 +129,19 @@ void draw() {
   try {
     DatagramPacket packet = new DatagramPacket(rxBuffer, rxBuffer.length);
     socket.receive(packet);
-    renderPacket(rxBuffer);
+    timedOut = false;
+  } catch (SocketTimeoutException e) {
+    timedOut = true;
   } catch (IOException e) {
     e.printStackTrace(); 
     println(e.getMessage());
   }
+  
+  if (timedOut) {
+    background(0);
+  } else {
+    background(255);
+  }
+  
+  renderPacket(rxBuffer);
 }
