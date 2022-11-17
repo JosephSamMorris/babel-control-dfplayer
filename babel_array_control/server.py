@@ -1,6 +1,6 @@
 import json
 from lights import LightArray
-from behavior import BabelBehavior
+from behavior import BehaviorController
 
 
 class ArrayServerException(Exception):
@@ -14,7 +14,7 @@ class ArrayServer:
         self.direct_mode = False
 
         # Pass ourselves in so the behavior controller can call the server to update the array
-        self.behavior_babel = BabelBehavior(self)
+        self.behavior_babel = BehaviorController(self)
         self.behavior_babel.start()
 
     def handle_behavior_request(self, request):

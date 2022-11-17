@@ -1,11 +1,10 @@
-import time
 import numpy as np
 import random
 import math
-import json
 import perlin
-from threading import Thread
 from lights import unit_index_from_pos
+from .behavior import Behavior
+from .util import constrain
 
 noise = perlin.Perlin(824393)
 
@@ -16,22 +15,14 @@ ARRAY_ROWS = 14
 DEBUG_SEE_PEOPLE = False
 
 
-def constrain(v, vmin, vmax):
-    if v < vmin:
-        return vmin
-    elif v > vmax:
-        return vmax
-
-    return v
-
-
 class SimPerson:
-    def __init__(self):
-        self.max_lifetime = 120
+    def __init__(self, params):
+        self.params = params
+
         self.time = 0
 
         # Most people walk through the center so let's sample from a centered normal distribution
-        self.x = np.random.normal(scale=13 / 4) + 13 / 2
+        self.x = np.random.normal(scale=ARRAY_COLUMNS / 4) + ARRAY_COLUMNS / 2
         self.x = 0 if self.x < 0 else self.x
         self.x = ARRAY_COLUMNS - 1 if self.x >= ARRAY_COLUMNS else self.x
 
@@ -55,14 +46,12 @@ class SimPerson:
         self.alive = False
 
     def random_speed(self):
-        min_speed = 0.05
-        max_speed = 0.5
+        min_speed = self.params['person_min_speed']
+        max_speed = self.params['person_max_speed']
         self.speed = random.random() * (max_speed - min_speed) + min_speed
 
     def update(self, dt):
         chance_of_stopping = 0.1
-        min_time_wait = 10
-        max_time_wait = 30  # They are only loaded with this much audio anyway
 
         if self.waiting:
             self.time_waiting += dt
@@ -80,10 +69,13 @@ class SimPerson:
                 self.time_waiting = 0
 
                 # Decide how long to stop for
-                self.time_to_wait = random.random() * (max_time_wait - min_time_wait) + min_time_wait
+                min_time = self.params['person_min_time_wait']
+                max_time = self.params['person_max_time_wait']
+                self.time_to_wait = random.random() * (max_time - min_time) + min_time
 
                 self.waiting = True
 
+        # Move them forward in their direction at their speed
         self.x += self.speed * math.cos(self.direction) * dt
         self.y += self.speed * math.sin(self.direction) * dt
 
@@ -98,19 +90,29 @@ class SimPerson:
             # Left the space
             self.die()
 
+        # Keep track of time passing so we can time out
         self.time += dt
 
         # Kill if too old (stuck?)
-        if self.time > self.max_lifetime:
+        if self.time > self.params['person_max_lifetime']:
             self.die()
 
 
-class BabelBehavior:
-    def __init__(self, array_server, rate=5):
-        self.array_server = array_server
-        self.update_thread = Thread(target=self.update_thread_fn, daemon=True)
-        self.rate = rate
-        self.time = 0
+class SimPeopleBehavior(Behavior):
+    def __init__(self):
+        super().__init__({
+            'chance_of_person': 0.1,
+            'min_volume': 0.2,
+            'max_volume': 0.8,
+            'silence_transition_time': 3,
+            'silent_radius': 2,  # How many units to make silent around someone who has stopped
+            'quiet_radius': 4,  # How many units to make quiet around someone who has stopped
+            'person_max_lifetime': 120,
+            'person_min_speed': 0.05,
+            'person_max_speed': 0.5,
+            'person_min_time_wait': 10,
+            'person_max_time_wait': 30,
+        })
 
         self.brightness = [0] * UNIT_COUNT
         self.volume = [0] * UNIT_COUNT
@@ -143,7 +145,7 @@ class BabelBehavior:
                     dist_factor = dist / r
                     self.clear_mask[off_idx] = dist_factor
 
-        self.people = [SimPerson()]
+        self.people = [SimPerson(self.params)]
 
     def render(self):
         if DEBUG_SEE_PEOPLE:
@@ -162,9 +164,6 @@ class BabelBehavior:
 
         # Update the clear mask
 
-        min_volume = 0.2
-        max_volume = 0.8
-
         for y in range(ARRAY_ROWS):
             for x in range(ARRAY_COLUMNS):
                 idx = unit_index_from_pos(x, y)
@@ -173,12 +172,8 @@ class BabelBehavior:
                     continue
 
                 prl = noise.three(x * 500, y * 500, self.time * 50 + 10)
-                b = (1 - constrain(-prl, 0, 20) / 20) * (max_volume - min_volume) + min_volume
+                b = (1 - constrain(-prl, 0, 20) / 20) * (self.params['max_volume'] - self.params['min_volume']) + self.params['min_volume']
                 self.clear_mask[idx] = b
-
-        transition_time = 3
-        silent_radius = 2  # How many units to make silent around someone who has stopped
-        quiet_radius = 4  # How many units to make quiet around someone who has stopped
 
         # Clear (gently)
         for i in range(UNIT_COUNT):
@@ -198,17 +193,18 @@ class BabelBehavior:
             if person.waiting:
                 # Lerp this from zero to some value to animate volume transition
                 # From zero to 1
-                intensity = 1 - constrain(transition_time - person.time_waiting, 0, transition_time) / transition_time
-                d = quiet_radius * 2
+                trans_time = self.params['silence_transition_time']
+                intensity = 1 - constrain(trans_time - person.time_waiting, 0, trans_time) / trans_time
+                d = self.params['quiet_radius'] * 2
 
                 for off_y in range(d):
                     for off_x in range(d):
                         # Bring the brightness / volume down
-                        c_off_x = off_x - quiet_radius
-                        c_off_y = off_y - quiet_radius
+                        c_off_x = off_x - self.params['quiet_radius']
+                        c_off_y = off_y - self.params['quiet_radius']
                         dist = math.sqrt(c_off_x ** 2 + c_off_y ** 2)
 
-                        if dist > quiet_radius:
+                        if dist > self.params['quiet_radius']:
                             # Only touch units within the quiet radius
                             continue
 
@@ -217,11 +213,13 @@ class BabelBehavior:
                         if off_idx is None:
                             continue
 
-                        if dist < silent_radius:
+                        if dist < self.params['silent_radius']:
                             b = 1 - intensity
                         else:
                             # 0 to 1 from edge of inner silent to border
-                            dist_factor = (dist - silent_radius) / (quiet_radius - silent_radius)
+                            silent_r = self.params['silent_radius']
+                            quiet_r = self.params['quiet_radius']
+                            dist_factor = (dist - silent_r) / (quiet_r - silent_r)
                             b = max(1 - intensity, dist_factor)
 
                         # Don't mess with quietings in progress
@@ -232,35 +230,15 @@ class BabelBehavior:
                 self.brightness[idx] = intensity
                 self.volume[idx] = intensity
 
-    def update_sim(self, dt):
-        chance_of_person = 0.1 * dt
+    def update(self, dt):
+        chance_of_person = self.params['chance_of_person'] * dt
 
         # Sometimes create people
         if random.random() < chance_of_person:
-            self.people.append(SimPerson())
+            self.people.append(SimPerson(self.params))
 
         for person in self.people:
             person.update(dt)
 
         # Remove the dead people
         self.people = [p for p in self.people if p.alive]
-
-    def update_thread_fn(self):
-        while True:
-            dt = 1.0 / self.rate
-
-            self.update_sim(dt)
-            self.render()
-
-            cmd = json.dumps({
-                'command': 'blit',
-                'brightness': self.brightness,
-                'volume': self.volume,
-            })
-            self.array_server.handle_behavior_request(cmd)
-
-            time.sleep(dt)
-            self.time += dt
-
-    def start(self):
-        self.update_thread.start()
