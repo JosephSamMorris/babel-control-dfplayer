@@ -2,15 +2,11 @@ import numpy as np
 import random
 import math
 import perlin
-from lights import unit_index_from_pos
+from ..lights import unit_index_from_pos, UNIT_COUNT, ARRAY_COLUMNS, ARRAY_ROWS
 from .behavior import Behavior
-from .util import constrain
+from .util import distance, constrain
 
 noise = perlin.Perlin(824393)
-
-UNIT_COUNT = 180
-ARRAY_COLUMNS = 13
-ARRAY_ROWS = 14
 
 DEBUG_SEE_PEOPLE = False
 
@@ -131,7 +127,7 @@ class SimPeopleBehavior(Behavior):
                 for off_x in range(d):
                     c_off_x = off_x - r
                     c_off_y = off_y - r
-                    dist = math.sqrt(c_off_x ** 2 + c_off_y ** 2)
+                    dist = distance(0, 0, c_off_x, c_off_y)
 
                     if dist > r:
                         # Only touch units within the quiet radius
@@ -202,7 +198,7 @@ class SimPeopleBehavior(Behavior):
                         # Bring the brightness / volume down
                         c_off_x = off_x - self.params['quiet_radius']
                         c_off_y = off_y - self.params['quiet_radius']
-                        dist = math.sqrt(c_off_x ** 2 + c_off_y ** 2)
+                        dist = distance(0, 0, c_off_x, c_off_y)
 
                         if dist > self.params['quiet_radius']:
                             # Only touch units within the quiet radius

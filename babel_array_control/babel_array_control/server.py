@@ -1,6 +1,6 @@
 import json
-from lights import LightArray
-from behavior import BehaviorController
+from .lights import LightArray
+from .behavior import BehaviorController
 
 
 class ArrayServerException(Exception):

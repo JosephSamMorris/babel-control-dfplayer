@@ -1,24 +1,61 @@
 from socket import socket, AF_INET, SOCK_DGRAM, IPPROTO_UDP, SOL_SOCKET, SO_REUSEADDR, SO_BROADCAST
 
 
+UNIT_COUNT = 180
+ARRAY_COLUMNS = 13
+ARRAY_ROWS = 14
+
+
+def unit_pos_from_index(index):
+    # The units are 1-indexed for now so we'll convert
+    zero_indexed = index - 1
+
+    if zero_indexed < 0 or zero_indexed >= ARRAY_COLUMNS * ARRAY_ROWS:
+        return None
+    elif zero_indexed < ARRAY_COLUMNS * 6:
+        x = zero_indexed % ARRAY_COLUMNS
+        y = zero_indexed // ARRAY_COLUMNS
+        return x, y
+    elif zero_indexed < ARRAY_COLUMNS * 6 + (ARRAY_COLUMNS - 2) * 2:
+        # The middle two rows each have two units missing on the left for the bar
+        adj_index = zero_indexed - ARRAY_COLUMNS * 6
+        x = adj_index % 11 + 2
+        y = adj_index / 11 + 6
+        return x, y
+    else:
+        # Add back the two sets of two units that are missing from the middle rows
+        adj_index = zero_indexed + 4
+        x = adj_index % ARRAY_COLUMNS
+        y = adj_index // ARRAY_COLUMNS
+        return x, y
+
+
 def unit_index_from_pos(x, y):
-    if x < 0 or x > 13:
+    # Reminder: units are 1-indexed
+
+    if x < 0 or x >= ARRAY_COLUMNS:
         return None
 
-    if 0 <= y < 6:
-        return y * 13 + x
-    elif y < 8:
-        i = 6 * 13
+    if y < 0 or y >= ARRAY_ROWS:
+        return None
 
+    if y < 6:
+        return 1 + y * ARRAY_COLUMNS + x
+    elif y < 8:
         # The center two strands each have two units removed for the bar on the "left"
         if x < 2:
             return None
 
-        i += (y - 6) * 11 + (x - 2)
-        return i
-    elif y < 14:
+        mid_width = ARRAY_COLUMNS - 2
+        mid_y = y - 6  # 0 or 1
+        return 1 + 6 * ARRAY_COLUMNS + mid_y * mid_width + (x - 2)
+    elif y < ARRAY_ROWS:
         # Remove the 4 that would be above the bar
-        return y * 13 + x - 4
+        return 1 + y * ARRAY_COLUMNS + x - 4
+
+
+def in_bounds(x, y):
+    return unit_index_from_pos(x, y) is not None
 
 
 class LightArray:

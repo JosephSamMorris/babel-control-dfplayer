@@ -2,7 +2,7 @@ import time
 import zmq
 import json
 from threading import Thread
-from server import ArrayServer, ArrayServerException
+from .server import ArrayServer, ArrayServerException
 
 
 def reply(socket, body):

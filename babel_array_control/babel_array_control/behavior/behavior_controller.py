@@ -2,6 +2,7 @@ import time
 import json
 from threading import Thread
 from .sim_people import SimPeopleBehavior
+from .raindrops import RainDropsBehavior
 
 
 class BehaviorController:
@@ -11,7 +12,8 @@ class BehaviorController:
 
         self.rate = rate
         self.behaviors_by_name = {
-            'sim_people': SimPeopleBehavior(),
+            # 'sim_people': SimPeopleBehavior(),
+            'raindrops': RainDropsBehavior(),
         }
 
         if len(self.behaviors_by_name) > 0:
