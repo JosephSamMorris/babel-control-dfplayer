@@ -1,31 +1,58 @@
 import time
 import json
 from threading import Thread
-from .sim_people import SimPeopleBehavior
+from .test_patterns import TestPatternsBehavior
+from .background import BackgroundBehavior
+from .transitions import FadeTransition
 from .raindrops import RainDropsBehavior
+from .wall_of_sound import WallOfSoundBehavior
+from .sim_people import SimPeopleBehavior
+from .musical import MusicalBehavior
 
 
 class BehaviorController:
-    def __init__(self, array_server, rate=5):
+    def __init__(self, array_server, randomize_behavior=False, rate=5):
         self.array_server = array_server
         self.update_thread = Thread(target=self.update_thread_fn, daemon=True)
 
         self.rate = rate
+        self.transitioning = False
         self.behaviors_by_name = {
-            # 'sim_people': SimPeopleBehavior(),
+            'test_patterns': TestPatternsBehavior({}),
+            'background': BackgroundBehavior(),
             'raindrops': RainDropsBehavior(),
+            'wall_of_sound': WallOfSoundBehavior(),
+            'musical': MusicalBehavior(),
+            'sim_people': SimPeopleBehavior(),
         }
 
-        if len(self.behaviors_by_name) > 0:
-            self.current_behavior = self.behaviors_by_name[next(iter(self.behaviors_by_name))]
-        else:
-            self.current_behavior = None
+        self.behavior_rotation = [
+            # 'background',
+            # 'raindrops',
+            'musical',
+        ]
+
+        # if len(self.behaviors_by_name) > 0:
+        #     self.current_behavior = self.behaviors_by_name[next(iter(self.behaviors_by_name))]
+        # else:
+        #     self.current_behavior = None
+
+        self.current_behavior = None
+        self.set_behavior(self.behavior_rotation[0])
 
     def set_behavior(self, behavior_name):
-        if behavior_name in self.behaviors_by_name:
+        if behavior_name not in self.behaviors_by_name:
             raise Exception('Unrecognized behavior name')
 
         self.current_behavior = self.behaviors_by_name[behavior_name]
+
+    def transition_to(self, behavior_name):
+        self.current_behavior = FadeTransition(
+            self.current_behavior,
+            self.behaviors_by_name[behavior_name],
+        )
+
+        self.transitioning = True
 
     def update_thread_fn(self):
         last_update_time = time.time()
@@ -35,6 +62,11 @@ class BehaviorController:
             now = time.time()
             dt = now - last_update_time
             last_update_time = now
+
+            if self.transitioning:
+                if self.current_behavior.done():
+                    self.current_behavior = self.current_behavior.to_behavior
+                    self.transitioning = False
 
             if self.current_behavior is not None:
                 self.current_behavior.update(dt)

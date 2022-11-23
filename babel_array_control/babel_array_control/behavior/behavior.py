@@ -10,19 +10,31 @@ class Behavior:
 
         self.time = 0
 
+    def clear_brightness(self, brightness):
+        for i in range(len(self.brightness)):
+            self.brightness[i] = brightness
+
     def zero_brightness(self):
-        self.brightness = [0] * UNIT_COUNT
+        self.clear_brightness(0)
+
+    def clear_volume(self, volume):
+        for i in range(len(self.volume)):
+            self.volume[i] = volume
 
     def zero_volume(self):
-        self.volume = [0] * UNIT_COUNT
+        self.clear_volume(0)
 
     def set_brightness(self, x, y, brightness):
         index = unit_index_from_pos(x, y)
-        self.brightness[index] = brightness
+
+        if index is not None:
+            self.brightness[index] = brightness
 
     def set_volume(self, x, y, volume):
         index = unit_index_from_pos(x, y)
-        self.volume[index] = volume
+
+        if index is not None:
+            self.volume[index] = volume
 
     def update(self, dt):
         self.time += dt

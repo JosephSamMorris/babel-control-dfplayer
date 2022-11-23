@@ -1,6 +1,6 @@
 import math
 import random
-from ..lights import unit_index_from_pos, unit_pos_from_index, in_bounds, ARRAY_ROWS, ARRAY_COLUMNS
+from ..lights import unit_pos_from_index, in_bounds, ARRAY_ROWS, ARRAY_COLUMNS
 from ..units_info import get_units_by_priority
 from .behavior import Behavior
 from .util import distance
@@ -32,10 +32,10 @@ class RainDrop:
 class RainDropsBehavior(Behavior):
     def __init__(self):
         super().__init__({
-            'chance_of_raindrop': 0.1,
-            'max_units_active': 9,
+            'chance_of_raindrop': 0.3,
+            'max_units_active': 40,
             'units_to_highlight': list(map(lambda info: info['index'], get_units_by_priority(2))),
-            'droplet_lifetime': 60,
+            'droplet_lifetime': 2 * 60,
             'droplet_wave_thickness': 3,
             'droplet_wave_speed': 2,
         })
@@ -56,16 +56,12 @@ class RainDropsBehavior(Behavior):
         ))
 
     def render(self):
-        self.zero_brightness()
+        self.clear_brightness(0.4)
         self.zero_volume()
 
         for droplet in self.droplets:
             cx = int(droplet.x)
             cy = int(droplet.y)
-
-            # Make the unit at the center loud and bright
-            self.set_brightness(cx, cy, 1)
-            self.set_volume(cx, cy, 1)
 
             # Draw the wave
 
@@ -93,7 +89,15 @@ class RainDropsBehavior(Behavior):
                     if dist < inner_r or dist > outer_r:
                         continue
 
-                    self.set_brightness(x, y, 1)
+                    self.set_brightness(x, y, 0.2)
+
+        for droplet in self.droplets:
+            cx = int(droplet.x)
+            cy = int(droplet.y)
+
+            # Make the unit at the center loud and bright
+            self.set_brightness(cx, cy, 1)
+            self.set_volume(cx, cy, 1)
 
     def update(self, dt):
         not_full = len(self.droplets) < self.params['max_units_active']

@@ -14,7 +14,7 @@ def load_array_map():
                 'index': int(index),
                 'language': language,
                 'priority': int(priority),
-                'musical': musical == 'TRUE',
+                'musical': musical.strip() == 'TRUE',
             }
 
     return arr_map
@@ -31,6 +31,22 @@ def get_units_by_priority(priority):
         info = array_map[hostname]
 
         if info['priority'] == priority:
+            units.append(info)
+
+    return units
+
+
+def get_musical_units():
+    global array_map
+
+    if array_map is None:
+        array_map = load_array_map()
+
+    units = []
+    for hostname in array_map:
+        info = array_map[hostname]
+
+        if info['musical']:
             units.append(info)
 
     return units

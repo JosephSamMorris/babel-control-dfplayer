@@ -13,20 +13,20 @@ def unit_pos_from_index(index):
     if zero_indexed < 0 or zero_indexed >= ARRAY_COLUMNS * ARRAY_ROWS:
         return None
     elif zero_indexed < ARRAY_COLUMNS * 6:
-        x = zero_indexed % ARRAY_COLUMNS
-        y = zero_indexed // ARRAY_COLUMNS
+        x = int(zero_indexed % ARRAY_COLUMNS)
+        y = int(zero_indexed // ARRAY_COLUMNS)
         return x, y
     elif zero_indexed < ARRAY_COLUMNS * 6 + (ARRAY_COLUMNS - 2) * 2:
         # The middle two rows each have two units missing on the left for the bar
         adj_index = zero_indexed - ARRAY_COLUMNS * 6
-        x = adj_index % 11 + 2
-        y = adj_index / 11 + 6
+        x = int(adj_index % 11 + 2)
+        y = int(adj_index / 11 + 6)
         return x, y
     else:
         # Add back the two sets of two units that are missing from the middle rows
         adj_index = zero_indexed + 4
-        x = adj_index % ARRAY_COLUMNS
-        y = adj_index // ARRAY_COLUMNS
+        x = int(adj_index % ARRAY_COLUMNS)
+        y = int(adj_index // ARRAY_COLUMNS)
         return x, y
 
 
