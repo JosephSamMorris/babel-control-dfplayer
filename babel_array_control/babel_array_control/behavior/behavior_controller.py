@@ -28,14 +28,9 @@ class BehaviorController:
 
         self.behavior_rotation = [
             # 'background',
-            # 'raindrops',
-            'musical',
+            'raindrops',
+            # 'musical',
         ]
-
-        # if len(self.behaviors_by_name) > 0:
-        #     self.current_behavior = self.behaviors_by_name[next(iter(self.behaviors_by_name))]
-        # else:
-        #     self.current_behavior = None
 
         self.current_behavior = None
         self.set_behavior(self.behavior_rotation[0])

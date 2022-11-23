@@ -1,9 +1,9 @@
 import math
 import random
-from ..lights import unit_pos_from_index, in_bounds, ARRAY_ROWS, ARRAY_COLUMNS
+from ..lights import unit_pos_from_index, unit_index_from_pos, in_bounds, UNIT_COUNT, ARRAY_ROWS, ARRAY_COLUMNS
 from ..units_info import get_units_by_priority
 from .behavior import Behavior
-from .util import distance
+from .util import distance, find_distant_unit
 
 
 class RainDrop:
@@ -35,6 +35,7 @@ class RainDropsBehavior(Behavior):
             'chance_of_raindrop': 0.3,
             'max_units_active': 40,
             'units_to_highlight': list(map(lambda info: info['index'], get_units_by_priority(2))),
+            'min_distance': 2,
             'droplet_lifetime': 2 * 60,
             'droplet_wave_thickness': 3,
             'droplet_wave_speed': 2,
@@ -46,7 +47,13 @@ class RainDropsBehavior(Behavior):
     def new_droplet(self):
         # Randomly pick a unit from those that should be highlighted
         # and create a new droplet on top of it
-        unit_index = random.choice(self.params['units_to_highlight'])
+        avoid_indices = list(map(lambda u: unit_index_from_pos(u.x, u.y), self.droplets))
+        unit_index = find_distant_unit(self.params['units_to_highlight'], avoid_indices, self.params['min_distance'])
+
+        if unit_index is None:
+            # We failed to find a unit that satisfies the min distance constrain so we'll not add a droplet
+            return
+
         x, y = unit_pos_from_index(unit_index)
         self.droplets.append(RainDrop(
             x, y,
