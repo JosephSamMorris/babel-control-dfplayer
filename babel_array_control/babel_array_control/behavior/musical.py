@@ -3,7 +3,7 @@ import math
 from .behavior import Behavior
 from ..lights import unit_pos_from_index
 from ..units_info import get_musical_units
-from .util import find_distant_unit
+from .util import find_distant_unit, constrain
 
 
 class MusicalBehavior(Behavior):
@@ -11,6 +11,7 @@ class MusicalBehavior(Behavior):
         super().__init__({
             'num_to_highlight': 3,
             'min_distance': 5,
+            'fade_in_time': 3,
             'breathing_period': 3,
             'transition_delay': 30,  # How many seconds between switching highlighted units
         })
@@ -27,7 +28,8 @@ class MusicalBehavior(Behavior):
         for unit_index in self.highlighted:
             cx, cy = unit_pos_from_index(unit_index)
 
-            self.set_volume(cx, cy, 1)
+            volume_fade_in = constrain((time.time() - self.highlight_time) / self.params['fade_in_time'], 0, 1)
+            self.set_volume(cx, cy, volume_fade_in)
 
             breathing_brightness = (1 + math.sin(2 * math.pi * self.time / self.params['breathing_period'])) / 2
             self.set_brightness(cx, cy, breathing_brightness)
