@@ -22,9 +22,9 @@ def spiral_xy(spiral_index, spacing=1):
 class SpiralBehavior(Behavior):
     def __init__(self):
         super().__init__({
-            'move_delay': .1,
+            'move_delay': 30,
             'padding': 1,  # Space between the lines
-            'spacing': 1,  # Space between one moving highlight and the next
+            'spacing': 10,  # Space between one moving highlight and the next
         })
 
     def render(self):
