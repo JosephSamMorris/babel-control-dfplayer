@@ -1,4 +1,5 @@
 import time
+import math
 from .behavior import Behavior
 from ..lights import unit_pos_from_index
 from ..units_info import get_musical_units
@@ -10,6 +11,7 @@ class MusicalBehavior(Behavior):
         super().__init__({
             'num_to_highlight': 3,
             'min_distance': 5,
+            'breathing_period': 3,
             'transition_delay': 30,  # How many seconds between switching highlighted units
         })
 
@@ -26,6 +28,9 @@ class MusicalBehavior(Behavior):
             cx, cy = unit_pos_from_index(unit_index)
 
             self.set_volume(cx, cy, 1)
+
+            breathing_brightness = (1 + math.sin(2 * math.pi * self.time / self.params['breathing_period'])) / 2
+            self.set_brightness(cx, cy, breathing_brightness)
 
             self.set_brightness(cx - 1, cy, 1)
             self.set_brightness(cx + 1, cy, 1)
@@ -51,6 +56,8 @@ class MusicalBehavior(Behavior):
         self.highlighted = new_highlights
 
     def update(self, dt):
+        super().update(dt)
+
         now = time.time()
 
         if self.highlight_time is None or (now - self.highlight_time) > self.params['transition_delay']:

@@ -28,8 +28,8 @@ class BehaviorController:
 
         self.behavior_rotation = [
             # 'background',
-            'raindrops',
-            # 'musical',
+            # 'raindrops',
+            'musical',
         ]
 
         self.current_behavior = None
