@@ -32,14 +32,20 @@ void setup() {
 }
 
 PVector positionFromIndex(int idx) {
-  if (idx < ARRAY_COLUMNS * 6) {
-    int y = idx / ARRAY_COLUMNS;
-    int x = idx % ARRAY_COLUMNS;
+  int idxFromZero = idx - 1;
+
+  if (idxFromZero < 0) {
+    return null;
+  }
+
+  if (idxFromZero < ARRAY_COLUMNS * 6) {
+    int y = idxFromZero / ARRAY_COLUMNS;
+    int x = idxFromZero % ARRAY_COLUMNS;
 
     return new PVector(x, y);
-  } else if (idx < ARRAY_COLUMNS * 6 + ARRAY_COLUMNS_SHORT * 2) {
+  } else if (idxFromZero < ARRAY_COLUMNS * 6 + ARRAY_COLUMNS_SHORT * 2) {
     // We are going to start by ignoring the first 6 rows with 13 units each
-    int adj_idx = idx - ARRAY_COLUMNS * 6;
+    int adj_idx = idxFromZero - ARRAY_COLUMNS * 6;
     
     int y = adj_idx / ARRAY_COLUMNS_SHORT + 6;
     
@@ -49,7 +55,7 @@ PVector positionFromIndex(int idx) {
     return new PVector(x, y);
   } else {
     // We pretend that the middle 2 rows actually had 13 units instead of 11
-    int adj_idx = idx + 2 * (ARRAY_COLUMNS - ARRAY_COLUMNS_SHORT);
+    int adj_idx = idxFromZero + 2 * (ARRAY_COLUMNS - ARRAY_COLUMNS_SHORT);
     
     int y = adj_idx / ARRAY_COLUMNS;
     int x = adj_idx % ARRAY_COLUMNS;
@@ -69,14 +75,14 @@ void renderPacket(byte[] buffer) {
 
   // Center our rendering
   // There are 12 full columns and 2 short ones
-  PVector arrayDrawDims = positionFromIndex(ARRAY_COLUMNS * 12 + ARRAY_COLUMNS_SHORT * 2 - 1);
+  PVector arrayDrawDims = positionFromIndex(ARRAY_COLUMNS * 12 + ARRAY_COLUMNS_SHORT * 2);
   translate((width - arrayDrawDims.x * unitDrawSpacing) / 2, (height - arrayDrawDims.y * unitDrawSpacing) / 2);
   
   strokeWeight(1);
   ellipseMode(CENTER);
   int count = min(UNIT_COUNT_IN_PACKET, UNIT_COUNT_IN_ARRAY);
 
-  for (int i = 0; i < count; i++) {
+  for (int i = 1; i <= count; i++) {
     int di = i * DATA_SIZE;
     
     int mode = buffer[di];
