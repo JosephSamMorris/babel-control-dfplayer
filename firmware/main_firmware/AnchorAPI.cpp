@@ -238,6 +238,10 @@ void AnchorAPI::setup(WebServer &server) {
     String msg = String(tempCelsius) + " C\n";
     server.send(200, "text/plain", msg);
   });
+
+  server.on("/firmware/version", HTTP_GET, [&]() {
+    server.send(200, "text/plain", "2");
+  });
 }
 
 String AnchorAPI::getHostname() {
