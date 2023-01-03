@@ -102,6 +102,7 @@ void setup(void) {
   WiFi.setAutoReconnect(true);
   WiFi.mode(WIFI_STA);
   WiFi.setHostname(api.getHostname().c_str());
+  WiFi.setSleep(false);
   WiFi.begin(ssid, password);
 
   int connectStatus = WL_IDLE_STATUS;
