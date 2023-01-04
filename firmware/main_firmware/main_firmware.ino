@@ -14,6 +14,7 @@ const unsigned int TIMEOUT_WIFI = 60 * 1000;
 const unsigned int TIMEOUT_COMMS = 5 * 60 * 1000;
 const unsigned int UDP_PORT = 4210;
 const float ANIMATION_BRIGHTNESS = 0.2;
+const int CONNECTION_ANIM_DURATION = PI * 1000 / 2;
 
 const char* ssid = STASSID;
 const char* password = STAPSK;
@@ -24,9 +25,12 @@ AnchorAPI api;
 AnchorReceiver receiver(UDP_PORT);
 
 void animateConnecting() {
+  // Hack to line up the animation cycles cleanly
+  static unsigned long offsetTime = millis();
+
   const float spread = PI / 2;
 
-  float angle = millis() / 100.0f;
+  float angle = (millis() - offsetTime) / 100.0f;
 
   controller.setBrightness(0, ANIMATION_BRIGHTNESS * (1 + sin(angle)) / 2);
   controller.setBrightness(1, ANIMATION_BRIGHTNESS * (1 + sin(angle + spread)) / 2);
@@ -118,6 +122,7 @@ void setup(void) {
   WiFi.setSleep(false);
   WiFi.begin(ssid, password);
 
+  unsigned long timeStartedConnecting = millis();
   int connectStatus = WL_IDLE_STATUS;
   do {
     connectStatus = WiFi.status();
@@ -127,9 +132,19 @@ void setup(void) {
       resetAfterDelay();
     }
 
-    animateConnecting();
-    delay(10);
+    // Only animate for a limited time to indicate that we are connecting
+    // and then switch to a low-level default brightness to blend in
+    if (millis() - timeStartedConnecting < CONNECTION_ANIM_DURATION) {
+      animateConnecting();
+    } else {
+      controller.setBrightness(0, ANIMATION_BRIGHTNESS);
+      controller.setBrightness(1, ANIMATION_BRIGHTNESS);
+      controller.setBrightness(2, ANIMATION_BRIGHTNESS);
+      controller.setBrightness(3, ANIMATION_BRIGHTNESS);
+    }
+
     Serial.print(".");
+    delay(10);
   } while (connectStatus != WL_CONNECTED);
   Serial.println();
 
