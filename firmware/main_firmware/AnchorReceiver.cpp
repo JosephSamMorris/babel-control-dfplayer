@@ -9,12 +9,12 @@ void AnchorReceiver::begin() {
   udp.begin(udpPort);
 }
 
-void AnchorReceiver::update() {
+bool AnchorReceiver::update() {
   int packetSize = udp.parsePacket();
 
   if (packetSize == 0) {
     // Nothing to process
-    return;
+    return false;
   }
 
   uint8_t packet[PACKET_SIZE] = {0};
@@ -22,7 +22,7 @@ void AnchorReceiver::update() {
 
   if (len != PACKET_SIZE) {
     // Invalid or not for us
-    return;
+    return false;
   }
 
   unsigned int packetOffset = controller->getPacketOffset();
@@ -41,4 +41,6 @@ void AnchorReceiver::update() {
   } else if (mode == 1) {
     // TODO: implement behavior commands
   }
+
+  return true;
 }

@@ -21,7 +21,9 @@ class AnchorReceiver {
 public:
   AnchorReceiver(unsigned int port) : udpPort(port) {}
   void begin();
-  void update();
+
+  // Returns true if an update message was processed
+  bool update();
 
 public:
   void setController(AnchorController *controller) {

@@ -11,6 +11,7 @@
 #include "wifi.h"
 
 const unsigned int TIMEOUT_WIFI = 60 * 1000;
+const unsigned int TIMEOUT_COMMS = 5 * 60 * 1000;
 const unsigned int UDP_PORT = 4210;
 const float ANIMATION_BRIGHTNESS = 0.2;
 
@@ -61,8 +62,6 @@ void animateConnectionFailed() {
 }
 
 void resetAfterDelay() {
-  Serial.println("WiFi connection timeout. Going to reset after a delay");
-
   // Delay a random amount before resetting to help alleviate stampeding
   delay(random(30 * 1000));
 
@@ -71,16 +70,30 @@ void resetAfterDelay() {
   ESP.restart();
 }
 
-void connectionWatchDog() {
+void connectionWatchDog(bool updated) {
   static unsigned long timeLastConnectedMillis = millis();
+  static unsigned long timeLastUpdatedMillis = millis();
+
   unsigned long currentMillis = millis();
 
-  if (WiFi.status() == WL_CONNECTED) {
-    timeLastConnectedMillis = currentMillis;
+  { // WiFi watchdog
+    if (WiFi.status() == WL_CONNECTED) {
+      // Reset the WiFi connection watchdog
+      timeLastConnectedMillis = currentMillis;
+    } else if ((currentMillis - timeLastConnectedMillis) > TIMEOUT_WIFI) {
+      Serial.println("WiFi connection watchdog timed out. Resetting...");
+      resetAfterDelay();
+    }
   }
 
-  if ((WiFi.status() != WL_CONNECTED) && (currentMillis - timeLastConnectedMillis) > TIMEOUT_WIFI) {
-    resetAfterDelay();
+  { // Update watchdog
+    if (updated) {
+      // Reset the update watchdog
+      timeLastUpdatedMillis = currentMillis;
+    } else if ((currentMillis - timeLastUpdatedMillis) > TIMEOUT_COMMS) {
+      Serial.println("Communications watchdog timed out. Resetting...");
+      resetAfterDelay();
+    }
   }
 }
 
@@ -139,9 +152,9 @@ void setup(void) {
 }
 
 void loop(void) {
-  connectionWatchDog();
-
   controller.update();
-  receiver.update();
+  bool updated = receiver.update();
   httpServer.handleClient();
+
+  connectionWatchDog(updated);
 }
