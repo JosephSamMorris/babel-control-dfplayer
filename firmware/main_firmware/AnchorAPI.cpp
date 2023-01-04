@@ -240,7 +240,7 @@ void AnchorAPI::setup(WebServer &server) {
   });
 
   server.on("/firmware/version", HTTP_GET, [&]() {
-    server.send(200, "text/plain", "2");
+    server.send(200, "text/plain", "3");
   });
 }
 
