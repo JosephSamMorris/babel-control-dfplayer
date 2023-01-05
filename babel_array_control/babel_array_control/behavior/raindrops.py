@@ -33,10 +33,12 @@ class RainDropsBehavior(Behavior):
     def __init__(self):
         super().__init__({
             'chance_of_raindrop': 0.3,
-            'max_units_active': 40,
-            'units_to_highlight': list(map(lambda info: info['index'], get_units_by_priority(2))),
+            'breathing_period': 2,
+            'max_units_active': 20,
+            'units_to_highlight': list(map(lambda info: info['index'], filter(lambda info: not info['musical'], get_units_by_priority(2)))),
             'min_distance': 2,
-            'droplet_lifetime': 2 * 60,
+            'min_brightness': 0.2,
+            'droplet_lifetime': 90,
             'droplet_wave_thickness': 3,
             'droplet_wave_speed': 2,
         })
@@ -96,7 +98,7 @@ class RainDropsBehavior(Behavior):
                     if dist < inner_r or dist > outer_r:
                         continue
 
-                    self.set_brightness(x, y, 0.2)
+                    self.set_brightness(x, y, self.params['min_brightness'])
 
         for droplet in self.droplets:
             cx = int(droplet.x)
