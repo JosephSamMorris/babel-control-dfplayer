@@ -3,4 +3,4 @@ wifi.h
 
 # Ignore build
 build/
-
+firmwares/
