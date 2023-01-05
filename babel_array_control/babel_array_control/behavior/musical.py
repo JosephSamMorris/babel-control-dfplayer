@@ -14,7 +14,7 @@ class MusicalBehavior(Behavior):
             'min_distance': 5,
             'fade_in_time': 3,
             'breathing_period': 6,
-            'transition_delay': 30,  # How many seconds between switching highlighted units
+            'transition_delay': 2 * 60,  # How many seconds between switching highlighted units
         })
 
         self.musical_units = list(map(lambda info: info['index'], get_musical_units()))
