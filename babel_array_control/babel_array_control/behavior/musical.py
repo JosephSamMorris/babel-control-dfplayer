@@ -10,6 +10,7 @@ class MusicalBehavior(Behavior):
     def __init__(self):
         super().__init__({
             'num_to_highlight': 3,
+            'min_brightness': 0.1,
             'min_distance': 5,
             'fade_in_time': 3,
             'breathing_period': 6,
@@ -22,7 +23,7 @@ class MusicalBehavior(Behavior):
         self.highlighted = []
 
     def render(self):
-        self.zero_brightness()
+        self.clear_brightness(self.params['min_brightness'])
         self.zero_volume()
 
         for unit_index in self.highlighted:
@@ -31,7 +32,9 @@ class MusicalBehavior(Behavior):
             volume_fade_in = constrain((time.time() - self.highlight_time) / self.params['fade_in_time'], 0, 1)
             self.set_volume(cx, cy, volume_fade_in)
 
-            breathing_brightness = (1 + math.sin(2 * math.pi * self.time / self.params['breathing_period'])) / 2
+            min_b = self.params['min_brightness']
+            bp = self.params['breathing_period']
+            breathing_brightness = min_b + 0.9 * (1 + math.sin(2 * math.pi * self.time / bp)) / 2
             self.set_brightness(cx, cy, breathing_brightness)
 
             self.set_brightness(cx - 1, cy, 1)
