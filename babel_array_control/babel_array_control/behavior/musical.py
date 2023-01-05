@@ -12,7 +12,7 @@ class MusicalBehavior(Behavior):
             'num_to_highlight': 3,
             'min_distance': 5,
             'fade_in_time': 3,
-            'breathing_period': 3,
+            'breathing_period': 6,
             'transition_delay': 30,  # How many seconds between switching highlighted units
         })
 
