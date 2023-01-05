@@ -7,32 +7,27 @@ ARRAY_ROWS = 14
 
 
 def unit_pos_from_index(index):
-    # The units are 1-indexed for now so we'll convert
-    zero_indexed = index - 1
-
-    if zero_indexed < 0 or zero_indexed >= ARRAY_COLUMNS * ARRAY_ROWS:
+    if index < 0 or index >= ARRAY_COLUMNS * ARRAY_ROWS:
         return None
-    elif zero_indexed < ARRAY_COLUMNS * 6:
-        x = int(zero_indexed % ARRAY_COLUMNS)
-        y = int(zero_indexed // ARRAY_COLUMNS)
+    elif index < ARRAY_COLUMNS * 6:
+        x = int(index % ARRAY_COLUMNS)
+        y = int(index // ARRAY_COLUMNS)
         return x, y
-    elif zero_indexed < ARRAY_COLUMNS * 6 + (ARRAY_COLUMNS - 2) * 2:
+    elif index < ARRAY_COLUMNS * 6 + (ARRAY_COLUMNS - 2) * 2:
         # The middle two rows each have two units missing on the left for the bar
-        adj_index = zero_indexed - ARRAY_COLUMNS * 6
+        adj_index = index - ARRAY_COLUMNS * 6
         x = int(adj_index % 11 + 2)
         y = int(adj_index / 11 + 6)
         return x, y
     else:
         # Add back the two sets of two units that are missing from the middle rows
-        adj_index = zero_indexed + 4
+        adj_index = index + 4
         x = int(adj_index % ARRAY_COLUMNS)
         y = int(adj_index // ARRAY_COLUMNS)
         return x, y
 
 
 def unit_index_from_pos(x, y):
-    # Reminder: units are 1-indexed
-
     if x < 0 or x >= ARRAY_COLUMNS:
         return None
 
@@ -40,7 +35,7 @@ def unit_index_from_pos(x, y):
         return None
 
     if y < 6:
-        return 1 + y * ARRAY_COLUMNS + x
+        return y * ARRAY_COLUMNS + x
     elif y < 8:
         # The center two strands each have two units removed for the bar on the "left"
         if x < 2:
@@ -48,10 +43,10 @@ def unit_index_from_pos(x, y):
 
         mid_width = ARRAY_COLUMNS - 2
         mid_y = y - 6  # 0 or 1
-        return 1 + 6 * ARRAY_COLUMNS + mid_y * mid_width + (x - 2)
+        return 6 * ARRAY_COLUMNS + mid_y * mid_width + (x - 2)
     elif y < ARRAY_ROWS:
         # Remove the 4 that would be above the bar
-        return 1 + y * ARRAY_COLUMNS + x - 4
+        return y * ARRAY_COLUMNS + x - 4
 
 
 def in_bounds(x, y):
