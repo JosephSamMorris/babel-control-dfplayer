@@ -1,161 +1,179 @@
-Location Index,Hostname,Language,Priority,Musical
-1,anchor-0c3cfb6de378,Tajik,2,FALSE
-2,anchor-f426696de378,Sierra Totonac,1,FALSE
-3,anchor-a4995debd724,Masalit,1,FALSE
-5,anchor-ac27696de378,Shughni,2,FALSE
-6,anchor-1827696de378,Wakhi,2,FALSE
-7,anchor-2cf45cebd724,Mixe,1,FALSE
-8,anchor-3028696de378,Tontemboan,2,FALSE
-9,anchor-60f45cebd724,Syrian Judeo-Arabic,2,TRUE
-10,anchor-283cfb6de378,Sherpa,1,FALSE
-11,anchor-c027696de378,Seke,1,FALSE
-13,anchor-f85d5cebd724,Tz'utukil,2,FALSE
-14,anchor-543dfb6de378,Nones,1,FALSE
-15,anchor-e427696de378,Tokpe Gola,1,FALSE
-16,anchor-2822696de378,Mazahua,0,FALSE
-18,anchor-043cfb6de378,Tzotzil,2,FALSE
-19,anchor-8027696de378,Mingrelian,0,FALSE
-20,anchor-70f45cebd724,Sami,0,FALSE
-21,anchor-f8db5bebd724,Tlapanec,0,FALSE
-23,anchor-44f55cebd724,Tok Pisin,0,FALSE
-24,anchor-283bfb6de378,P'urhepecha,2,FALSE
-25,anchor-04c55debd724,Romansh,2,FALSE
-26,anchor-143bfb6de378,Mixtec,0,FALSE
-28,anchor-5427696de378,Tamang,0,FALSE
-29,anchor-b027696de378,Zaghawa,1,FALSE
-30,anchor-5828696de378,Neapolitan,0,FALSE
-31,anchor-3c3bfb6de378,Tashelhyt,0,FALSE
-32,anchor-6426696de378,Shina,0,FALSE
-33,anchor-3427696de378,Sharchop,2,TRUE
-34,anchor-2828696de378,Thakali,1,FALSE
-35,anchor-f0f45cebd724,Pugliese (Barese),0,FALSE
-36,anchor-8427696de378,Nahuatl,2,FALSE
-37,anchor-1c28696de378,Sicilian,0,FALSE
-38,anchor-d03bfb6de378,Peruvian Quechua,0,FALSE
-39,anchor-e43bfb6de378,Rushani,1,FALSE
-41,anchor-a43bfb6de378,K'iche',1,FALSE
-42,anchor-bc9c5debd724,Mamuju,0,FALSE
-43,anchor-383bfb6de378,Kota,2,TRUE
-44,anchor-58955debd724,Bribri,0,FALSE
-45,anchor-543bfb6de378,Kham Tibetan,2,FALSE
-46,anchor-28f5686de378,Loke,2,TRUE
-47,anchor-dc5d5cebd724,Kabardian,1,FALSE
-48,anchor-6c26696de378,Amdo Tibetan,2,FALSE
-49,anchor-f4f45cebd724,Bishnupriya Manipuri,0,FALSE
-50,anchor-883bfb6de378,Bartangi,2,FALSE
-52,anchor-c8f45cebd724,Baragaun,2,FALSE
-55,anchor-103cfb6de378,Fur,0,FALSE
-56,anchor-2c27696de378,Hawaiian,0,FALSE
-57,anchor-ac925debd724,Adyghe,1,FALSE
-58,anchor-dc5d5cebd724,Manang,0,FALSE
-59,anchor-c025696de378,Breton,0,FALSE
-60,anchor-bc27696de378,Khowar,2,TRUE
-61,anchor-d8f45cebd724,Chaldean Neo-Aramaic,2,FALSE
-62,anchor-2c28696de378,Dungan,0,FALSE
-63,anchor-d027696de378,Garifuna,0,FALSE
-64,anchor-d827696de378,Dzongkha,0,FALSE
-65,anchor-38b15bebd724,Gurung,0,FALSE
-66,anchor-d0f45cebd724,Ishkashimi,0,FALSE
-67,anchor-7c27696de378,Zaza,2,FALSE
-68,anchor-2c3bfb6de378,Judeo-Shirazi,0,FALSE
-69,anchor-503bfb6de378,Juhuri,0,FALSE
-70,anchor-243efb6de378,Lazuri,0,FALSE
-71,anchor-e027696de378,Chamorro,2,FALSE
-72,anchor-203cfb6de378,Judeo-Greek,2,FALSE
-73,anchor-b4f45cebd724,Ecuadorian Kichwa,0,FALSE
-74,anchor-ec26696de378,Burushaski,0,FALSE
-75,anchor-ac3bfb6de378,Calabrese,1,FALSE
-76,anchor-3cf45cebd724,Buginese,0,FALSE
-77,anchor-cc3bfb6de378,Bahing,1,FALSE
-78,anchor-88f45cebd724,Chakma,0,FALSE
-79,anchor-0426696de378,Judeo-Isfahani,0,FALSE
-80,anchor-6827696de378,Judeo-Kashani,2,FALSE
-81,anchor-2c27696de378,Irish,0,FALSE
-82,anchor-b83bfb6de378,Haketia,1,FALSE
-83,anchor-9427696de378,Balti,1,FALSE
-84,anchor-8025696de378,Acehnese,0,TRUE
-85,anchor-4822696de378,Magar,1,FALSE
-86,anchor-80f45cebd724,Amuzgo,0,FALSE
-87,anchor-6826696de378,Bukhori,0,FALSE
-88,anchor-b427696de378,Jewish Neo-Aramaic (Bijar),0,FALSE
-89,anchor-c827696de378,Bantawa,1,FALSE
-90,anchor-3c3cfb6de378,Sharchop,2,TRUE
-91,anchor-d8b25bebd724,Nones,1,FALSE
-92,anchor-1828696de378,Tok Pisin,0,FALSE
-93,anchor-a427696de378,Judeo-Isfahani,0,FALSE
-95,anchor-943bfb6de378,Thakali,1,FALSE
-96,anchor-e03bfb6de378,Judeo-Shirazi,0,FALSE
-97,anchor-5426696de378,Loke,2,TRUE
-98,anchor-7cf45cebd724,Manang,0,FALSE
-99,anchor-e025696de378,Shina,0,FALSE
-100,anchor-dc26696de378,Sicilian,0,FALSE
-101,anchor-3c28696de378,Zaghawa,1,FALSE
-102,anchor-6428696de378,Seke,1,FALSE
-103,anchor-343bfb6de378,Kham Tibetan,2,FALSE
-104,anchor-dc27696de378,Tokpe Gola,1,FALSE
-105,anchor-403bfb6de378,Shughni,2,FALSE
-106,anchor-6cf55cebd724,Magar,1,FALSE
-107,anchor-14f55cebd724,Sierra Totonac,1,FALSE
-108,anchor-a027696de378,Tzotzil,2,FALSE
-109,anchor-1427696de378,Rushani,1,FALSE
-110,anchor-f4f35cebd724,Tashelhyt,0,FALSE
-111,anchor-b43bfb6de378,Juhuri,0,FALSE
-112,anchor-c427696de378,P'urhepecha,2,FALSE
-113,anchor-243cfb6de378,Tibetan,1,FALSE
-114,anchor-1c27696de378,Tz'utujil,2,FALSE
-115,anchor-ec27696de378,Judeo-Kashani,2,FALSE
-116,anchor-acf45cebd724,Lazuri,0,FALSE
-117,anchor-643bfb6de378,Syrian Judeo-Arabic,2,TRUE
-118,anchor-f826696de378,Kabardian,1,FALSE
-119,anchor-e426696de378,Tajik,2,FALSE
-120,anchor-44975debd724,Pugliese (Barese),0,FALSE
-121,anchor-0827696de378,Mixtec,0,FALSE
-122,anchor-f427696de378,Tlapanec,0,FALSE
-123,anchor-18f45cebd724,Romansh,2,FALSE
-124,anchor-04f55cebd724,Sherpa,1,FALSE
-125,anchor-a8f45cebd724,Mingrelian,0,FALSE
-126,anchor-187e59ebd724,Peruvian Quechua,0,FALSE
-127,anchor-f026696de378,Mazahua,0,FALSE
-128,anchor-4cf159ebd724,Mamuju,2,FALSE
-129,anchor-fc26696de378,Tontemboan,2,FALSE
-130,anchor-9c27696de378,Wakhi,2,FALSE
-131,anchor-84955debd724,K'iche',1,FALSE
-132,anchor-f827696de378,Khowar,2,TRUE
-133,anchor-5827696de378,Khota,0,FALSE
-134,anchor-7027696de378,Nahuatl,2,FALSE
-135,anchor-7828696de378,Tamang,0,FALSE
-136,anchor-98f65cebd724,Neapolitan,0,FALSE
-137,anchor-50f45cebd724,Mixe,1,FALSE
-138,anchor-44f45cebd724,Sami,0,FALSE
-139,anchor-d826696de378,Masalit,1,FALSE
-142,anchor-ec955debd724,Bukhori,0,FALSE
-143,anchor-183bfb6de378,Chakma,0,FALSE
-144,anchor-0428696de378,Garifuna,0,FALSE
-145,anchor-2027696de378,Judeo-Greek,2,FALSE
-146,anchor-30b15bebd724,Dungan,0,FALSE
-147,anchor-b83dfb6de378,Bahing,1,FALSE
-148,anchor-4427696de378,Chaldean Neo-Aramaic,2,FALSE
-149,anchor-3027696de378,Bantawa,1,FALSE
-150,anchor-d426696de378,Amuzgo,0,FALSE
-151,anchor-083cfb6de378,Breton,0,FALSE
-152,anchor-34a559ebd724,Adyghe,1,FALSE
-155,anchor-8c27696de378,Amdo Tibetan,2,FALSE
-156,anchor-3827696de378,Fur,0,FALSE
-157,anchor-c03bfb6de378,Irish,0,FALSE
-158,anchor-0027696de378,Hawaiian,0,FALSE
-159,anchor-c03bfb6de378,Ishkashimi,0,FALSE
-160,anchor-d4db5bebd724,Gurung,0,FALSE
-161,anchor-24f45cebd724,Bartangi,2,FALSE
-162,anchor-5c905debd724,Dzongkha,0,FALSE
-164,anchor-f8a05debd724,Acehnese,0,TRUE
-165,anchor-905e5cebd724,Balti,1,FALSE
-168,anchor-1428696de378,Chamorro,2,FALSE
-169,anchor-5822696de378,Ecuadorian Kichwa,0,FALSE
-170,anchor-28f45cebd724,Haketia,1,FALSE
-171,anchor-d026696de378,Bribri,0,FALSE
-172,anchor-6427696de378,Bishnupriya Manipuri,0,FALSE
-173,anchor-3428696de378,Burushaski,0,FALSE
-174,anchor-d09f5debd724,Calabrese,1,FALSE
-175,anchor-4c27696de378,Buginese,0,FALSE
-176,anchor-0427696de378,Jewish Neo-Aramaic (Bijar),0,FALSE
-177,anchor-5c3bfb6de378,Baragaun,2,FALSE
+Location Index,Language,Priority,Musical
+0,Abaza,2,FALSE
+1,Ewondo,2,TRUE
+2,Masalit,1,FALSE
+3,Pugliese,2,FALSE
+4,Bolivian Quechua,2,FALSE
+5,Wakhi,2,FALSE
+6,Mixe,1,FALSE
+7,Tontemboan,2,FALSE
+8,Bambara,2,FALSE
+9,Sherpa,1,FALSE
+10,Wolof,2,FALSE
+11,Latin,2,FALSE
+12,Tz'utujil,2,FALSE
+13,Nones,1,FALSE
+14,Tokpe Gola,1,FALSE
+15,Mazahua,0,FALSE
+16,Tsou,2,TRUE
+17,Tzotzil,2,FALSE
+18,Mingrelian,0,FALSE
+19,Sami,0,FALSE
+20,Ladino,2,FALSE
+21,Ikota (Mahongwe),2,FALSE
+22,Tok Pisin,0,FALSE
+23,Purépecha,2,FALSE
+24,Romansh,2,FALSE
+25,Mixtec,0,FALSE
+26,Achenese (Austronesian),2,TRUE
+27,Tamang,0,FALSE
+28,Zaghawa,1,FALSE
+29,Neapolitan,0,FALSE
+30,Tashelhyt,0,FALSE
+31,Shina,0,FALSE
+32,Chechen,2,FALSE
+33,Thakali,1,FALSE
+34,Pugliese (Barese),0,FALSE
+35,Guerrero Nahuatl,2,FALSE
+36,Khmer,2,FALSE
+37,Peruvian Quechua,0,FALSE
+38,Rushani,1,FALSE
+39,Mambae,2,FALSE
+40,K'iche',1,FALSE
+41,Mamuju,2,FALSE
+42,"Batak, Toba",2,FALSE
+43,Bribri,0,FALSE
+44,Kham Tibetan,2,FALSE
+45,Loke,2,TRUE
+46,Breton,0,FALSE
+47,Amdo Tibetan,2,FALSE
+48,Bishnupriya Manipuri,0,FALSE
+49,Bartangi,2,FALSE
+50,Rikou,2,TRUE
+51,Hazara,2,FALSE
+52,Sama,2,FALSE
+53,Sakha (Yakut),2,TRUE
+54,Fur,0,FALSE
+55,Hawaiian,0,FALSE
+56,Adyghe,1,FALSE
+57,Cuicatec,2,FALSE
+58,Breton,2,FALSE
+59,Khowar,2,TRUE
+60,Chaldean Neo-Aramaic,2,FALSE
+61,Dungan,0,FALSE
+62,Garifuna,0,FALSE
+63,Dzongkha,0,TRUE
+64,Gurung,0,FALSE
+65,Ishkashimi,0,FALSE
+66,Zaza,2,FALSE
+67,Judeo-Shirazi,0,FALSE
+68,Juhuri,0,FALSE
+69,Lazuri,0,FALSE
+70,Chamorro,2,FALSE
+71,Judeo-Greek,2,FALSE
+72,Ecuadorian Kichwa,0,FALSE
+73,Burushaski,0,FALSE
+74,Calabrese,1,FALSE
+75,Buginese,0,FALSE
+76,Bahing,1,FALSE
+77,Chakma,0,FALSE
+78,Judeo-Isfahani,0,FALSE
+79,Judeo-Kashani,2,FALSE
+80,Bribri,2,FALSE
+81,Haketia,1,FALSE
+82,Balti,1,FALSE
+83,Acehnese,0,TRUE
+84,Yii,2,FALSE
+85,Amuzgo,0,FALSE
+86,Bukhori,0,FALSE
+87,Jewish Neo-Aramaic (Bijar),0,FALSE
+88,Bantawa,1,FALSE
+89,Sharchop,2,TRUE
+90,Hausa,2,TRUE
+91,Puerto Rican Spanish,2,FALSE
+92,Ossetian,2,FALSE
+93,Hua,2,FALSE
+94,Navajo,2,FALSE
+95,Sudanese Arabic,2,FALSE
+96,Mam,2,FALSE
+97,Hopi,2,TRUE
+98,Dinka,2,TRUE
+99,Sicilian,0,FALSE
+100,Zaghawa,1,FALSE
+101,Seke,1,FALSE
+102,"Tibetan, Ramaluk",2,FALSE
+103,Tokpe Gola,1,FALSE
+104,Shughni,2,FALSE
+105,Magar,1,FALSE
+106,Sierra Totonac,1,FALSE
+107,Tzotzil,2,FALSE
+108,Pijin,2,FALSE
+109,"Lenape, Unami",2,FALSE
+110,Turkish,2,FALSE
+111,Greek,2,FALSE
+112,Tibetan,1,FALSE
+113,Tz'utujil,2,FALSE
+114,Vietnamese,2,TRUE
+115,Macedonian,2,FALSE
+116,Syrian Judeo-Arabic,2,TRUE
+117,Dolpo,2,FALSE
+118,Tajik,2,FALSE
+119,Ngari Tibetan,2,FALSE
+120,Hindi,2,TRUE
+121,Tlapanec,0,FALSE
+122,Burmese,2,FALSE
+123,Haitian Creole,2,FALSE
+124,Croatian,2,FALSE
+125,Somali,2,TRUE
+126,Romani,2,FALSE
+127,Galician,2,TRUE
+128,Tontemboan,2,FALSE
+129,Wakhi,2,FALSE
+130,Ndebele,2,FALSE
+131,Fon,2,FALSE
+132,Haitian,2,FALSE
+133,Marathi,2,TRUE
+134,Fulani,2,FALSE
+135,Libyan Arabic,2,FALSE
+136,Khaling,2,FALSE
+137,Turkish,2,FALSE
+138,Kurdish,2,FALSE
+139,Ngaju Dayak,2,FALSE
+140,Dela-Oenale,2,FALSE
+141,Papantla Totonac,2,FALSE
+142,"Assyrian, Suret",2,FALSE
+143,Occitan,2,FALSE
+144,Yiddish,2,TRUE
+145,Nepali,2,FALSE
+146,Kiranti,2,FALSE
+147,Mandaic,2,FALSE
+148,Livonian,2,FALSE
+149,Buryat,2,FALSE
+150,Manggarai,2,TRUE
+151,Kaqchikel,2,FALSE
+152,Baikeno,2,FALSE
+153,Helong,2,FALSE
+154,Sundanese,2,FALSE
+155,Kuranko,2,FALSE
+156,Irish,0,FALSE
+157,Irish,2,FALSE
+158,Abzakh,2,FALSE
+159,Nheengatu,2,FALSE
+160,Scottish Gaelic,2,TRUE
+161,Baragaon,2,FALSE
+162,Southern Dong (Kam),2,FALSE
+163,Kalmyk,2,FALSE
+164,Sunwar,2,FALSE
+165,Beria,2,FALSE
+166,Purépecha,2,FALSE
+167,Koda,2,FALSE
+168,Guerrero Nahuatl,2,FALSE
+169,Welsh,2,FALSE
+170,Manange,0,FALSE
+171,Ladino,2,FALSE
+172,Lillooet,2,FALSE
+173,Dimli [Southern Zaza],2,FALSE
+174,Yazgulom,2,FALSE
+175,Bengali,2,FALSE
+176,Baragaon,2,FALSE
+177,Sarikoli,2,FALSE

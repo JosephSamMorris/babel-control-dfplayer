@@ -1,4 +1,5 @@
 from pathlib import Path
+import csv
 
 array_map = None
 
@@ -8,9 +9,11 @@ def load_array_map():
     map_file_path = Path(__file__).parent.resolve() / 'data/array_map.csv'
 
     with open(map_file_path, 'r') as map_file:
-        for line in map_file.readlines()[1:]:
-            index, hostname, language, priority, musical = line.split(',')
-            arr_map[hostname] = {
+        lines = map_file.readlines()[1:]
+
+        for values in csv.reader(lines, quotechar='"', delimiter=',', quoting=csv.QUOTE_ALL, skipinitialspace=True):
+            index, language, priority, musical = values
+            arr_map[index] = {
                 'index': int(index),
                 'language': language,
                 'priority': int(priority),
@@ -27,8 +30,8 @@ def get_units_by_priority(priority):
         array_map = load_array_map()
 
     units = []
-    for hostname in array_map:
-        info = array_map[hostname]
+    for index in array_map:
+        info = array_map[index]
 
         if info['priority'] == priority:
             units.append(info)
@@ -43,8 +46,8 @@ def get_musical_units():
         array_map = load_array_map()
 
     units = []
-    for hostname in array_map:
-        info = array_map[hostname]
+    for index in array_map:
+        info = array_map[index]
 
         if info['musical']:
             units.append(info)
