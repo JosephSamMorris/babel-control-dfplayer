@@ -105,7 +105,8 @@ class RainDropsBehavior(Behavior):
             cy = int(droplet.y)
 
             # Make the unit at the center loud and bright
-            self.set_brightness(cx, cy, 1)
+            breathing_brightness = (1 + math.sin(2 * math.pi * self.time / self.params['breathing_period'])) / 2
+            self.set_brightness(cx, cy, breathing_brightness)
             self.set_volume(cx, cy, 1)
 
     def update(self, dt):
