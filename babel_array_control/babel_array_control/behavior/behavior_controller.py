@@ -9,7 +9,7 @@ from .raindrops import RainDropsBehavior
 from .wall_of_sound import WallOfSoundBehavior
 from .sim_people import SimPeopleBehavior
 from .musical import MusicalBehavior
-from .spiral import SpiralBehavior
+from .wipe import WipeBehavior
 
 
 class BehaviorController:
@@ -32,14 +32,14 @@ class BehaviorController:
             'raindrops': RainDropsBehavior(),
             'wall_of_sound': WallOfSoundBehavior(),
             'musical': MusicalBehavior(),
-            'spiral': SpiralBehavior(),
+            'wipe': WipeBehavior(),
             'sim_people': SimPeopleBehavior(),
         }
 
         self.behavior_rotation = [
             'raindrops',
             'musical',
-            'spiral',
+            'wipe',
         ]
 
         self.current_behavior = None
