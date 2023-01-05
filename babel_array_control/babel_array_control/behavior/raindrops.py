@@ -110,6 +110,8 @@ class RainDropsBehavior(Behavior):
             self.set_volume(cx, cy, 1)
 
     def update(self, dt):
+        super().update(dt)
+
         not_full = len(self.droplets) < self.params['max_units_active']
         if not_full and random.random() < self.params['chance_of_raindrop'] * dt:
             self.new_droplet()
