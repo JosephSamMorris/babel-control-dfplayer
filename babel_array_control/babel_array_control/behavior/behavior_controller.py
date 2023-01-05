@@ -22,7 +22,7 @@ class BehaviorController:
         self.active_from_hour = 15  # Turns on from this hour
         self.active_to_hour = 22  # Turns off after this hour
 
-        self.transition_period = 60 * 10
+        self.transition_period = 60 * 5
         self.transitioning = False
         self.time_of_last_transition = None
 
