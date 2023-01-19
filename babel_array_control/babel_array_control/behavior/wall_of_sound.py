@@ -3,6 +3,7 @@ import perlin
 from .behavior import Behavior
 from ..lights import in_bounds, unit_index_from_pos, ARRAY_ROWS, ARRAY_COLUMNS
 from .util import constrain
+from ..units_info import get_units_by_priority
 
 noise = perlin.Perlin(824393)
 
@@ -13,6 +14,7 @@ class WallOfSoundBehavior(Behavior):
             'speed': 3,
             'light_wall_thickness': 3,
             'sound_wall_thickness': 5,
+            'units_to_disable': get_units_by_priority(0),
         })
 
     def render(self):
@@ -33,7 +35,7 @@ class WallOfSoundBehavior(Behavior):
 
                 idx = unit_index_from_pos(x, y)
                 brightness_here = self.brightness[idx]
-                volume_here = self.volume[idx]
+                volume_here = 0 if idx in self.params['units_to_disable'] else self.volume[idx]
 
                 if anim_time > time_for_wall:
                     if was_wall:

@@ -40,6 +40,7 @@ def get_units_by_priority(priority):
 
 
 def get_musical_units():
+    """Get units that only play music and are not priority 0 (disabled)"""
     global array_map
 
     if array_map is None:
@@ -49,7 +50,7 @@ def get_musical_units():
     for index in array_map:
         info = array_map[index]
 
-        if info['musical']:
+        if info['musical'] and info['priority'] != 0:
             units.append(info)
 
     return units

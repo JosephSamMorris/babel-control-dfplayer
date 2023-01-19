@@ -31,11 +31,14 @@ class RainDrop:
 
 class RainDropsBehavior(Behavior):
     def __init__(self):
+        high_priority_units = get_units_by_priority(2)
+        nonmusical_high_priority_units = list(map(lambda info: info['index'], filter(lambda info: not info['musical'], high_priority_units)))
+
         super().__init__({
             'chance_of_raindrop': 0.3,
             'breathing_period': 2,
             'max_units_active': 20,
-            'units_to_highlight': list(map(lambda info: info['index'], filter(lambda info: not info['musical'], get_units_by_priority(2)))),
+            'units_to_highlight': nonmusical_high_priority_units,
             'min_distance': 2,
             'min_brightness': 0.2,
             'droplet_lifetime': 90,
@@ -53,7 +56,7 @@ class RainDropsBehavior(Behavior):
         unit_index = find_distant_unit(self.params['units_to_highlight'], avoid_indices, self.params['min_distance'])
 
         if unit_index is None:
-            # We failed to find a unit that satisfies the min distance constrain so we'll not add a droplet
+            # We failed to find a unit that satisfies the min distance constrain, so we'll not add a droplet
             return
 
         x, y = unit_pos_from_index(unit_index)
