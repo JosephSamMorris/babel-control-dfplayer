@@ -9,7 +9,7 @@ from .util import find_distant_unit, constrain
 class MusicalBehavior(Behavior):
     def __init__(self):
         super().__init__({
-            'num_to_highlight': 3,
+            'num_to_highlight': 4,
             'min_brightness': 0.1,
             'min_distance': 5,
             'fade_in_time': 3,
