@@ -122,7 +122,7 @@ class BehaviorController:
                 self.array_server.handle_behavior_request(cmd)
 
             time_spent_updating = time.time() - last_update_time
-            time_until_next_update = period - time_spent_updating
+            time_until_next_update = max(period - time_spent_updating, 0)
             time.sleep(time_until_next_update)
 
     def start(self):
