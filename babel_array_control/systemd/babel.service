@@ -1,0 +1,17 @@
+[Unit]
+Description=Babel Array Control
+After=multi-user.target
+OnBootSec=10min
+
+[Service]
+Type=idle
+User=owen
+Group=owen
+WorkingDirectory=/home/owen/babel_array_control
+ExecStart=/usr/bin/python3 -m babel_array_control
+StandardOutput=append:/var/log/babel_array_control_stdout.log
+StandardError=append:/var/log/babel_array_control_err.log
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
