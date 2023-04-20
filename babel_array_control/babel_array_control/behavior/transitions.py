@@ -4,7 +4,7 @@ from .util import constrain
 
 
 class Transition(Behavior):
-    def __init__(self, from_behavior, to_behavior, transition_time=10):
+    def __init__(self, from_behavior, to_behavior, transition_time=3):
         super().__init__({})
 
         self.from_behavior = from_behavior

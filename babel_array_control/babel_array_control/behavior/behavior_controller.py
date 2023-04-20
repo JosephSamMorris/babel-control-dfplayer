@@ -12,6 +12,9 @@ from .musical import MusicalBehavior
 from .wipe import WipeBehavior
 
 
+DEFAULT_TRANSITION_TIME = 60 * 5
+
+
 class BehaviorController:
     def __init__(self, array_server, rate=5):
         self.array_server = array_server
@@ -23,7 +26,6 @@ class BehaviorController:
         self.weekend_active_from_hour = 17
         self.active_to_hour = 22  # Turns off after this hour
 
-        self.transition_period = 60 * 5
         self.transitioning = False
         self.time_of_last_transition = None
 
@@ -38,9 +40,9 @@ class BehaviorController:
         }
 
         self.behavior_rotation = [
-            'raindrops',
-            'musical',
-            'wipe',
+            ('raindrops', DEFAULT_TRANSITION_TIME),
+            ('musical', DEFAULT_TRANSITION_TIME),
+            ('wipe', DEFAULT_TRANSITION_TIME),
         ]
 
         self.current_behavior = None
@@ -57,6 +59,13 @@ class BehaviorController:
 
     def transition_to(self, behavior_name):
         print(f'Transitioning to {behavior_name}')
+
+        # Cancel any active transition
+        if self.transitioning:
+            self.current_behavior = self.current_behavior.to_behavior
+            self.current_behavior_name = self.next_behavior_name
+            self.next_behavior_name = None
+            self.transitioning = False
 
         self.current_behavior = FadeTransition(
             self.current_behavior,
@@ -90,23 +99,39 @@ class BehaviorController:
             else:
                 active_from_hour = self.weekend_active_from_hour
 
+            # Set the behavior based on the week day and time of day
+
             if datetime_now.hour < active_from_hour or datetime_now.hour >= self.active_to_hour:
+                # Background behavior during inactive hours
                 if not self.behavior_is_or_will_be('background'):
                     self.transition_to('background')
             else:
-                # Cycle the behaviors periodically
-                if self.time_of_last_transition is None or now - self.time_of_last_transition > self.transition_period:
+                # Cycle through our behaviors during active hours
+
+                behavior_names = list(map(lambda b: b[0], self.behavior_rotation))
+                behavior_index = None
+                behavior_transition_time = DEFAULT_TRANSITION_TIME
+
+                try:
+                    behavior_index = behavior_names.index(self.current_behavior_name)
+                    behavior_transition_time = self.behavior_rotation[behavior_index][1]
+                except ValueError:
+                    # The current behavior is not in the rotation
+                    pass
+
+                if self.time_of_last_transition is None or now - self.time_of_last_transition > behavior_transition_time:
                     if self.current_behavior_name is not None:
                         try:
-                            behavior_index = self.behavior_rotation.index(self.current_behavior_name)
-                            behavior_index += 1
+                            if behavior_index is None:
+                                behavior_index = 0
+                            else:
+                                behavior_index += 1
+
                             behavior_index %= len(self.behavior_rotation)
                         except ValueError:
                             behavior_index = 0
-                    else:
-                        behavior_index = 0
 
-                    self.transition_to(self.behavior_rotation[behavior_index])
+                    self.transition_to(self.behavior_rotation[behavior_index][0])
                     self.time_of_last_transition = now
 
             if self.transitioning:
