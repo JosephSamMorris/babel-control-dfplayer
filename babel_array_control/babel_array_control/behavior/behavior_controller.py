@@ -19,7 +19,8 @@ class BehaviorController:
 
         self.rate = rate
 
-        self.active_from_hour = 15  # Turns on from this hour
+        self.weekday_active_from_hour = 15  # Turns on from this hour
+        self.weekend_active_from_hour = 17
         self.active_to_hour = 22  # Turns off after this hour
 
         self.transition_period = 60 * 5
@@ -82,7 +83,14 @@ class BehaviorController:
 
             # Play the background behavior until it is late enough in the day
             datetime_now = datetime.datetime.now()
-            if datetime_now.hour < self.active_from_hour or datetime_now.hour >= self.active_to_hour:
+            is_weekday = datetime_now.weekday()
+
+            if is_weekday:
+                active_from_hour = self.weekday_active_from_hour
+            else:
+                active_from_hour = self.weekend_active_from_hour
+
+            if datetime_now.hour < active_from_hour or datetime_now.hour >= self.active_to_hour:
                 if not self.behavior_is_or_will_be('background'):
                     self.transition_to('background')
             else:
