@@ -1,9 +1,12 @@
 import time
 import math
 from .behavior import Behavior
-from ..lights import unit_pos_from_index
+from ..lights import unit_pos_from_index, unit_index_from_pos, ARRAY_ROWS, ARRAY_COLUMNS
 from ..units_info import get_musical_units
 from .util import find_distant_unit, constrain
+import perlin
+
+noise = perlin.Perlin(824393)
 
 
 class MusicalBehavior(Behavior):
@@ -11,6 +14,7 @@ class MusicalBehavior(Behavior):
         super().__init__({
             'num_to_highlight': 3,
             'min_brightness': 0.1,
+            'max_brightness': 1,
             'min_distance': 5,
             'fade_in_time': 3,
             'breathing_period': 6,
@@ -26,6 +30,19 @@ class MusicalBehavior(Behavior):
         self.clear_brightness(self.params['min_brightness'])
         self.zero_volume()
 
+        # Noise pattern for the light
+        for y in range(ARRAY_ROWS):
+            for x in range(ARRAY_COLUMNS):
+                idx = unit_index_from_pos(x, y)
+
+                if idx is None:
+                    continue
+
+                prl = noise.three(x * 100, y * 300, self.time * 300 + 10)
+                b = (1 - constrain(-prl, 0, 20) / 20) * (self.params['max_brightness'] - self.params['min_brightness']) + self.params['min_brightness']
+
+                self.brightness[idx] = b
+
         for unit_index in self.highlighted:
             cx, cy = unit_pos_from_index(unit_index)
 
@@ -36,11 +53,6 @@ class MusicalBehavior(Behavior):
             bp = self.params['breathing_period']
             breathing_brightness = min_b + 0.9 * (1 + math.sin(2 * math.pi * self.time / bp)) / 2
             self.set_brightness(cx, cy, breathing_brightness)
-
-            self.set_brightness(cx - 1, cy, 1)
-            self.set_brightness(cx + 1, cy, 1)
-            self.set_brightness(cx, cy - 1, 1)
-            self.set_brightness(cx, cy + 1, 1)
 
         return None
 
