@@ -56,7 +56,7 @@ class RainDropsBehavior(Behavior):
         unit_index = find_distant_unit(self.params['units_to_highlight'], avoid_indices, self.params['min_distance'])
 
         if unit_index is None:
-            # We failed to find a unit that satisfies the min distance constrain, so we'll not add a droplet
+            # We failed to find a unit that satisfies the min distance constraint, so we'll not add a droplet
             return
 
         x, y = unit_pos_from_index(unit_index)
