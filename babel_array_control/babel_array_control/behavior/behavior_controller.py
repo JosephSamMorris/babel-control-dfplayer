@@ -10,6 +10,7 @@ from .wall_of_sound import WallOfSoundBehavior
 from .sim_people import SimPeopleBehavior
 from .musical import MusicalBehavior
 from .wipe import WipeBehavior
+from .babel import BabelBehavior
 
 
 DEFAULT_TRANSITION_TIME = 60 * 5
@@ -30,6 +31,7 @@ class BehaviorController:
         self.time_of_last_transition = None
 
         self.behaviors_by_name = {
+            'babel': BabelBehavior(),
             'test_patterns': TestPatternsBehavior({}),
             'background': BackgroundBehavior(),
             'raindrops': RainDropsBehavior(),
@@ -40,8 +42,11 @@ class BehaviorController:
         }
 
         self.behavior_rotation = [
+            ('babel', 30),
             ('raindrops', DEFAULT_TRANSITION_TIME),
+            ('babel', 30),
             ('musical', DEFAULT_TRANSITION_TIME),
+            ('babel', 30),
             ('wipe', DEFAULT_TRANSITION_TIME),
         ]
 
