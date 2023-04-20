@@ -6,7 +6,7 @@ from .util import constrain
 class WipeBehavior(Behavior):
     def __init__(self):
         super().__init__({
-            'move_delay': 7,
+            'move_delay': 5,
         })
 
     def render(self):
