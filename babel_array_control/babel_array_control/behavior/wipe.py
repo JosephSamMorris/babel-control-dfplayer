@@ -13,7 +13,13 @@ class WipeBehavior(Behavior):
         self.zero_volume()
         self.clear_brightness(0.1)
 
-        wall_y = (self.time / self.params['move_delay']) % ARRAY_ROWS
+        wall_time = self.time / self.params['move_delay']
+        dir_down = int(wall_time / ARRAY_ROWS) % 2 == 0
+
+        if dir_down:
+            wall_y = wall_time % ARRAY_ROWS
+        else:
+            wall_y = ARRAY_ROWS - wall_time % ARRAY_ROWS
 
         for y in range(ARRAY_ROWS):
             for x in range(ARRAY_COLUMNS):
