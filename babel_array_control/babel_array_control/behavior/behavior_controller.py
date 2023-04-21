@@ -50,8 +50,8 @@ class BehaviorController:
             ('wipe', DEFAULT_TRANSITION_TIME),
         ]
 
+        self.behavior_index = 0
         self.current_behavior = None
-        self.current_behavior_name = None
         self.next_behavior_name = None
         self.set_behavior('background')
 
@@ -60,7 +60,6 @@ class BehaviorController:
             raise Exception('Unrecognized behavior name')
 
         self.current_behavior = self.behaviors_by_name[behavior_name]
-        self.current_behavior_name = behavior_name
 
     def transition_to(self, behavior_name):
         print(f'Transitioning to {behavior_name}')
@@ -68,7 +67,6 @@ class BehaviorController:
         # Cancel any active transition
         if self.transitioning:
             self.current_behavior = self.current_behavior.to_behavior
-            self.current_behavior_name = self.next_behavior_name
             self.next_behavior_name = None
             self.transitioning = False
 
@@ -80,11 +78,14 @@ class BehaviorController:
 
         self.transitioning = True
 
+    def current_behavior_name(self):
+        return self.behavior_rotation[self.behavior_index][0]
+
     def behavior_is_or_will_be(self, behavior_name):
         if self.transitioning:
             return self.next_behavior_name == behavior_name
         else:
-            return self.current_behavior_name == behavior_name
+            return self.current_behavior_name() == behavior_name
 
     def update_thread_fn(self):
         last_update_time = time.time()
@@ -113,30 +114,19 @@ class BehaviorController:
             else:
                 # Cycle through our behaviors during active hours
 
-                behavior_names = list(map(lambda b: b[0], self.behavior_rotation))
-                behavior_index = None
                 behavior_transition_time = DEFAULT_TRANSITION_TIME
 
                 try:
-                    behavior_index = behavior_names.index(self.current_behavior_name)
-                    behavior_transition_time = self.behavior_rotation[behavior_index][1]
+                    behavior_transition_time = self.behavior_rotation[self.behavior_index][1]
                 except ValueError:
                     # The current behavior is not in the rotation
                     pass
 
                 if self.time_of_last_transition is None or now - self.time_of_last_transition > behavior_transition_time:
-                    if self.current_behavior_name is not None:
-                        try:
-                            if behavior_index is None:
-                                behavior_index = 0
-                            else:
-                                behavior_index += 1
+                    self.behavior_index += 1
+                    self.behavior_index %= len(self.behavior_rotation)
 
-                            behavior_index %= len(self.behavior_rotation)
-                        except ValueError:
-                            behavior_index = 0
-
-                    self.transition_to(self.behavior_rotation[behavior_index][0])
+                    self.transition_to(self.behavior_rotation[self.behavior_index][0])
                     self.time_of_last_transition = now
 
             if self.transitioning:
@@ -144,7 +134,6 @@ class BehaviorController:
                     # Must handle transition specially because
                     # we don't want to reset the behavior we are transitioning to
                     self.current_behavior = self.current_behavior.to_behavior
-                    self.current_behavior_name = self.next_behavior_name
                     self.next_behavior_name = None
                     self.transitioning = False
 
