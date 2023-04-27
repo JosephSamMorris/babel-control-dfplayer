@@ -87,6 +87,19 @@ class BehaviorController:
         else:
             return self.current_behavior_name() == behavior_name
 
+    def is_active(self):
+        # Play the background behavior until it is late enough in the day
+
+        datetime_now = datetime.datetime.now()
+        is_weekday = datetime_now.weekday() < 5
+
+        if is_weekday:
+            active_from_hour = self.weekday_active_from_hour
+        else:
+            active_from_hour = self.weekend_active_from_hour
+
+        return active_from_hour <= datetime_now.hour < self.active_to_hour
+
     def update_thread_fn(self):
         last_update_time = time.time()
         period = 1.0 / self.rate
@@ -96,18 +109,7 @@ class BehaviorController:
             dt = now - last_update_time
             last_update_time = now
 
-            # Play the background behavior until it is late enough in the day
-            datetime_now = datetime.datetime.now()
-            is_weekday = datetime_now.weekday()
-
-            if is_weekday:
-                active_from_hour = self.weekday_active_from_hour
-            else:
-                active_from_hour = self.weekend_active_from_hour
-
-            # Set the behavior based on the week day and time of day
-
-            if datetime_now.hour < active_from_hour or datetime_now.hour >= self.active_to_hour:
+            if not self.is_active():
                 # Background behavior during inactive hours
                 if not self.behavior_is_or_will_be('background'):
                     self.transition_to('background')
