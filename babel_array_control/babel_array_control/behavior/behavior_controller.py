@@ -23,10 +23,6 @@ class BehaviorController:
 
         self.rate = rate
 
-        self.weekday_active_from_hour = 15  # Turns on from this hour
-        self.weekend_active_from_hour = 17
-        self.active_to_hour = 22  # Turns off after this hour
-
         self.transitioning = False
         self.time_of_last_transition = None
 
@@ -90,15 +86,27 @@ class BehaviorController:
     def is_active(self):
         # Play the background behavior until it is late enough in the day
 
+        active_from_hour = 17
+        active_to_hour = 22
+
         datetime_now = datetime.datetime.now()
-        is_weekday = datetime_now.weekday() < 5
+        day = datetime_now.weekday()
+        is_weekend = day >= 5
 
-        if is_weekday:
-            active_from_hour = self.weekday_active_from_hour
+        if day == 0:  # Monday
+            # Mon: 8am-10pm
+            active_from_hour = 8
+            active_to_hour = 22
+        elif not is_weekend:
+            # Tuesday - Weds - Thurs - Fri: 8am-3pm
+            active_from_hour = 8
+            active_to_hour = 15
         else:
-            active_from_hour = self.weekend_active_from_hour
+            # Sat - Sun: 5pm-10pm
+            active_from_hour = 17
+            active_to_hour = 22
 
-        return active_from_hour <= datetime_now.hour < self.active_to_hour
+        return active_from_hour <= datetime_now.hour < active_to_hour
 
     def update_thread_fn(self):
         last_update_time = time.time()
