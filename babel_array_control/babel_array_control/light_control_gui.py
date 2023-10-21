@@ -98,7 +98,7 @@ class LightControllerApp:
         
         self.track_entry = tk.Entry(root)
         self.track_entry.grid(row=2, column=1)
-        self.track_entry.insert(0, "0")
+        self.track_entry.insert(0, "1")
         
         self.volume_entry = tk.Entry(root)
         self.volume_entry.grid(row=3, column=1)
