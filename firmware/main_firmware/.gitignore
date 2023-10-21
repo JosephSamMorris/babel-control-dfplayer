@@ -1,6 +1,0 @@
-# Avoid committing WiFi credentials
-wifi.h
-
-# Ignore build
-build/
-firmwares/
