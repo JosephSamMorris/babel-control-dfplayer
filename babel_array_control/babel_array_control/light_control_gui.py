@@ -4,6 +4,7 @@ import time
 import threading
 
 
+
 class LightArray:
     """Use UDP broadcasts to communicate with the array"""
     def __init__(self, broadcast_addr='255.255.255.255', port=4210, num_units=180):
@@ -75,7 +76,7 @@ class LightArray:
 class LightControllerApp:
     def __init__(self, root):
         self.root = root
-        self.root.title("Light Controller Multi-Unit")
+        self.root.title("Anchor Controller")
         
                
         self.always_on_top_var = tk.BooleanVar()  # Variable to hold the state of the toggle
@@ -83,9 +84,15 @@ class LightControllerApp:
         self.always_on_top_checkbutton.grid(row=6, column=0, columnspan=2)
    
    
+        self.output_text = tk.Text(root, height=7, width=50)  # Creating a Text widget for output
+        self.output_text.grid(row=7, column=0, columnspan=2)
+        self.output_text.insert(tk.END, "Output Messages:\n")
+        self.last_message = ""  # Variable to store the last printed message
+
+   
         tk.Label(root, text="Unit Number:").grid(row=0, column=0)
         tk.Label(root, text="Brightness (0-1):").grid(row=1, column=0)
-        tk.Label(root, text="Track #:").grid(row=2, column=0)
+        tk.Label(root, text="Track #").grid(row=2, column=0)
         tk.Label(root, text="Volume (0-1):").grid(row=3, column=0)
         
         self.unit_entry = tk.Entry(root)
@@ -109,6 +116,10 @@ class LightControllerApp:
         
         self.stop_button = tk.Button(root, text="Stop Broadcasting", command=self.stop_broadcasting)
         self.stop_button.grid(row=5, column=0, columnspan=2)
+                
+        self.clear_button = tk.Button(root, text="Clear Output", command=self.clear_output)
+        self.clear_button.grid(row=8, column=0, columnspan=2)
+
         
         self.broadcasting = False
         
@@ -122,8 +133,21 @@ class LightControllerApp:
 
     def stop_broadcasting(self):
         self.broadcasting = False
+        
+    def clear_output(self):
+        self.output_text.delete(1.0, tk.END)
+        self.output_text.insert(tk.END, "Output Messages:\n")  # Inserting the initial text back
+
+
+
+    def print_to_gui(self, message):
+        if message != self.last_message:  # Check if the new message is different from the last one
+            self.output_text.insert(tk.END, message + "\n")  # Inserting messages to the Text widget
+            self.output_text.yview(tk.END)  # Auto-scrolling to the end of the Text widget
+            self.last_message = message  # Update the last_message variable
 
     def broadcast_loop(self):
+        
         light_array = LightArray()  # Create an instance of LightArray
         last_unit_number = None
         last_brightness = None
@@ -140,22 +164,28 @@ class LightControllerApp:
                 if not (0 <= brightness <= 1 and 0 <= volume <= 1):
                     raise ValueError("Brightness and volume must be between 0 and 1")
                 
-                if not (0 <= track):
-                    raise ValueError("Offset must be greater than 1")
+                if not (1 <= track):
+                    raise ValueError("track # must be greater than 0")
                 
                 last_unit_number = unit_number
                 last_brightness = brightness
                 last_track = track
                 last_volume = volume
                 
+                # Displaying the values being sent in the GUI
+                message = f"\nSending values -> \n\nUnit: \t\t  {last_unit_number}\nBrightness: \t\t{last_brightness}\nTrack: \t\t{last_track}\nVolume: \t\t{last_volume}"
+                self.print_to_gui(message)
+             
             except ValueError as e:
-                print(f"Error: {e}")
-                print("Continuing with previous values.")
+                self.print_to_gui(f"Error: {e}")  # Redirecting error messages to the GUI
+                #self.print_to_gui("Continuing with previous values.")
                 
                 if last_unit_number is None or last_brightness is None or last_track is None or last_volume is None:
-                    print("No previous values available. Waiting for valid input.")
+                    self.print_to_gui("Waiting for valid input.")
                     time.sleep(1)
                     continue
+    
+
 
             # Setting the brightness and volume using the last known good values
             light_array.set_brightness(last_unit_number, last_brightness)
