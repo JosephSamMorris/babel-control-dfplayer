@@ -1,6 +1,6 @@
 #include "AudioController.h"
 
-int track = 1;    //the first song on the SD card
+int track;    //the first song on the SD card
 int currentTrack; 
 
 void AudioController::setup() {
